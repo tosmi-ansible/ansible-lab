@@ -1,0 +1,10 @@
+- name: Wait 600 seconds for bastion to become reachable/usable
+  wait_for_connection:
+
+- name: Install required packages
+  dnf:
+    name: bind
+
+- name: Configure bind RPZ Response Policy Zone if required
+  include_tasks: rpz_bind_configuration.yml
+  when: bastion_rpz_required

@@ -1,0 +1,134 @@
+- name: stop box01 hosts
+  hosts: box01.lan.stderr.at
+  become: no
+  gather_facts: no
+  tasks:
+    - name: stop worker nodes
+      virt:
+        name: "{{ item }}"
+        command: shutdown
+        state: shutdown
+      loop:
+        - stor01
+        - infra02
+        - worker02
+
+    - name: wait for infra and worker node shutdown
+      virt:
+       name: "{{ item }}"
+       command: status
+      register: result
+      until: result.status == 'shutdown'
+      delay: 5
+      retries: 720
+      loop:
+        - stor01
+        - infra02
+        - worker02
+
+- name: stop box02 hosts
+  hosts: box02.lan.stderr.at
+  become: no
+  gather_facts: no
+  tasks:
+    - name: stop worker nodes
+      virt:
+        name: "{{ item }}"
+        command: shutdown
+        state: shutdown
+      loop:
+        - stor02
+        - worker03
+        - worker04
+
+    - name: wait for infra and worker node shutdown
+      virt:
+       name: "{{ item }}"
+       command: status
+      register: result
+      until: result.status == 'shutdown'
+      delay: 5
+      retries: 720
+      loop:
+        - stor02
+        - worker03
+        - worker04
+
+- name: stop box03 hosts
+  hosts: box03.lan.stderr.at
+  become: no
+  gather_facts: no
+  tasks:
+    - name: stop worker nodes
+      virt:
+        name: "{{ item }}"
+        command: shutdown
+        state: shutdown
+      loop:
+        - stor03
+
+    - name: wait for infra and worker node shutdown
+      virt:
+       name: "{{ item }}"
+       command: status
+      register: result
+      until: result.status == 'shutdown'
+      delay: 5
+      retries: 720
+      loop:
+        - stor03
+
+- name: stop a cluster
+  hosts: localhost
+  become: no
+  gather_facts: no
+  tasks:
+    - name: stop worker nodes
+      virt:
+        name: "{{ item }}"
+        command: shutdown
+        state: shutdown
+      loop:
+        - infra01
+        - worker01
+
+    - name: wait for infra and worker node shutdown
+      virt:
+       name: "{{ item }}"
+       command: status
+      register: result
+      until: result.status == 'shutdown'
+      delay: 5
+      retries: 720
+      loop:
+        - infra01
+        - worker01
+
+    - name: stop control plane nodes
+      virt:
+        name: "{{ item }}"
+        command: shutdown
+        state: shutdown
+      loop:
+        - master01
+        - master02
+        - master03
+
+    - name: wait for masters to be shut down
+      virt:
+       name: "{{ item }}"
+       command: status
+      register: result
+      until: result.status == 'shutdown'
+      delay: 5
+      retries: 720
+      loop:
+        - master01
+        - master02
+        - master03
+
+    - name: stop the bastion host
+      virt:
+        name: bastion
+        command: shutdown
+        state: shutdown
