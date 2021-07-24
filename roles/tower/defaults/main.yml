@@ -1,2 +1,5 @@
 ---
 # defaults file for tower
+tower_host: tower.local
+tower_username: admin
+tower_password: redhat
