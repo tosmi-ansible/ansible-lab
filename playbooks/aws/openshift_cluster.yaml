@@ -1,0 +1,8 @@
+---
+- name: Create a default OpenShift Cluster in AWS
+  hosts: localhost
+  tasks:
+    - name: Extract the installer
+      unarchive:
+        src: "https://mirror.openshift.com/pub/openshift-v4/clients/ocp/stable/openshift-install-linux.tar.gz"
+        dest: "./"
