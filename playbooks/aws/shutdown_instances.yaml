@@ -1,10 +1,11 @@
 - name: Shutdown all EC2 instances found
   hosts: localhost
+  gather_facts: no
   tasks:
-    - name: Gather information about all instances
-      debug:
-        msg: "{{ item }}"
-      with_items: "{{ groups['aws_ec2'] }}"
+    # - name: Gather information about all instances
+    #   debug:
+    #     msg: "{{ item }}"
+    #   with_items: "{{ groups['aws_ec2'] }}"
 
     - name: Shutdown instances
       community.aws.ec2_instance_info:
