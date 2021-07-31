@@ -5,3 +5,9 @@
       debug:
         msg: "{{ item }}"
       with_items: "{{ groups['aws_ec2'] }}"
+
+    - name: Shutdown instances
+      community.aws.ec2_instance:
+        id: "{{ item }}"
+        state: stopped
+      with_items: "{{ groups['aws_ec2'] }}"
