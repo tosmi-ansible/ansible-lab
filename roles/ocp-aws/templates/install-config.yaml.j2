@@ -1,5 +1,5 @@
 apiVersion: v1
-baseDomain: {{ base_domain }}
+baseDomain: {{ aws_base_domain }}
 compute:
 - architecture: amd64
   hyperthreading: Enabled
@@ -14,7 +14,7 @@ controlPlane:
   replicas: 3
 metadata:
   creationTimestamp: null
-  name: hub
+  name: {{ aws_cluster_name }}
 networking:
   clusterNetwork:
   - cidr: 10.128.0.0/14
@@ -26,8 +26,8 @@ networking:
   - 172.30.0.0/16
 platform:
   aws:
-    region: {{ aws_region }
+    region: {{ aws_region }}
 publish: External
-pullSecret: '{{ pull_secret }}'
+pullSecret: '{{ aws_ocp_pull_secret }}'
 sshKey: |
-  {{ ssh_key }
+  {{ aws_ssh_key }}

@@ -1,27 +1,6 @@
 ---
 - name: Create a default OpenShift Cluster in AWS
-  hosts: localhost
-  tasks:
-    - name: Create temporary build directory
-      ansible.builtin.tempfile:
-        state: directory
-        suffix: build
-      register: temp_dir
-
-    - name: Extract the installer
-      ansible.builtin.unarchive:
-        src: https://mirror.openshift.com/pub/openshift-v4/clients/ocp/stable/openshift-install-linux.tar.gz
-        dest: "{{ temp_dir.path }}"
-        remote_src: yes
-
-    - name: Template install-config.yaml
-      ansible.builtin.template:
-        src: install-config.yaml.j2
-        dest: "{{ temp_dir.path }}/install-config.yaml"
-
-
-    # - name: Use the registered var and the file module to remove the temporary file
-    #   ansible.builtin.file:
-    #     path: "{{ temp_dir.path }}"
-    #     state: absent
-    #   when: temp_dir.path is defined
+  hosts: all
+  gather_facts: no
+  roles:
+    - ocp-aws
