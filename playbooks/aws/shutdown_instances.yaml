@@ -17,6 +17,5 @@
     - name: Shutdown instance
       community.aws.ec2_instance:
         id: "{{ item.instance_id }}"
-                     instance_id
         state: stopped
       with_items: "{{ ec2_info.instances }}"
