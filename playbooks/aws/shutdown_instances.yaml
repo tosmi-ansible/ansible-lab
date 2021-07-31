@@ -19,4 +19,5 @@
       community.aws.ec2_instance:
         instance_ids: "{{ item.instance_id }}"
         state: stopped
+        region: "{{ aws_region }}"
       with_items: "{{ ec2_info.instances }}"
