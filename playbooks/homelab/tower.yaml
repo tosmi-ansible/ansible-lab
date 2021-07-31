@@ -90,6 +90,6 @@
 - name: Configure Ansible Tower
   gather_facts: no
   hosts:
-    - localhost
+    - tower
   roles:
     - tower
