@@ -17,8 +17,9 @@
   args:
     creates: /opt/venvs/aws-venv
 
-- name: Install boto3 into venv
+- name: Install required pip packages into venv
   pip:
     name:
       - boto3
+      - ansible==2.9
     virtualenv: /opt/venvs/aws-venv
