@@ -1,0 +1,7 @@
+- name: Shutdown all EC2 instances found
+  hosts: localhost
+  tasks:
+    - name: Gather information about all instances
+      debug:
+        msg: "{{ item }}"
+      with_items: "{{ groups['aws_ec2'] }}"

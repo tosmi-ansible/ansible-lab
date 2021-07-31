@@ -1,0 +1,2 @@
+- name: Gather information about all instances
+  community.aws.ec2_instance_info:
