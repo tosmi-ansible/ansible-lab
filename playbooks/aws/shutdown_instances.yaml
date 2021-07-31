@@ -13,7 +13,7 @@
       register: ec2_info
 
     - debug:
-        msg: "{{ q('subelements'),ec2_info.instances,'instance_id }}"
+        msg: "{{ q('subelements',ec2_info.instances,'instance_id') }}"
 
     - name: Shutdown instance
       community.aws.ec2_instance:
