@@ -10,6 +10,8 @@
   command: /usr/bin/update-ca-trust
   when: tower_deployed_ca.changed
 
+- include_tasks: aws-venv.yaml
+
 # - name: Upload manifest.zip
 #   awx.awx.license:
 #     tower_host: "{{ tower_host }}"

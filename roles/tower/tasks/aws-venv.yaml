@@ -1,0 +1,24 @@
+- name: Install required packages
+  dnf:
+    name:
+      - python3-virtualenv
+    state: present
+
+- name: Create venvs base directory
+  file:
+    path: /opt/venvs
+    state: directory
+    mode: 0755
+    owner: awx
+    group: awx
+
+- name: Create virtual env for AWS
+  command: /usr/bin/virtualenv /opt/venvs/aws-venv
+  args:
+    creates: /opt/venvs/aws-venv
+
+- name: Install boto3 into venv
+  pip:
+    name:
+      - boto3
+    virtualenv: /opt/venvs/aws-venv
