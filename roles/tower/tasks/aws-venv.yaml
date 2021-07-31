@@ -21,5 +21,6 @@
   pip:
     name:
       - boto3
+      - psutil
       - ansible==2.9
     virtualenv: /opt/venvs/aws-venv
