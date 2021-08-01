@@ -1,5 +1,5 @@
 - name: Shutdown all EC2 instances found
-  hosts: localhost
+  hosts: all
   gather_facts: no
   tasks:
     # - name: Gather information about all instances
