@@ -18,7 +18,7 @@
 
 - name: Convert install state to json
   set_fact:
-    ocp_install_state: "{{ ocp_install_state_raw | from_json }}"
+    ocp_install_state: "{{ ocp_install_state_raw.stdout | from_json }}"
     ocp_instance_id: "{{ ocp_install_state | json_query('*installconfig.ClusterID.InfraID')}}"
     aws_cluster_tag: "kubernetes.io/cluster/{{ ocp_instance_id }}"
 
