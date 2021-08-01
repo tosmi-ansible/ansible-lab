@@ -28,6 +28,9 @@
   set_fact:
     aws_cluster_tag: "kubernetes.io/cluster/{{ ocp_instance_id }}"
 
+- name: Print environment
+  shell: /bin/env
+
 - name: Collect instance facts
   community.aws.ec2_instance_info:
     region: "{{ aws_region }}"
