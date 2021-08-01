@@ -10,7 +10,7 @@
 - name: Fail if OpenShift install state does not exists
   fail:
     msg: "Could not find install state"
-  when: not ocp_install_state.state.exists
+  when: not ocp_install_state.stat.exists
 
 - name: Read OpenShift install state
   command: "cat {{ ocp_install_state_file }}"
