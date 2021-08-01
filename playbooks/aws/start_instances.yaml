@@ -3,5 +3,6 @@
   gather_facts: no
   tasks:
     - name: Start all EC2 instances
-      include_role: ocp-aws
-      tasks_from: start_instances
+      include_role:
+        name: ocp-aws
+        tasks_from: start_instances
