@@ -19,15 +19,21 @@
 - name: Convert install state to json
   set_fact:
     ocp_install_state: "{{ ocp_install_state_raw.stdout | from_json }}"
-    ocp_instance_id: "{{ ocp_install_state | json_query('*installconfig.ClusterID.InfraID')}}"
+
+- name: Query install state for cluster ID
+  set_fact:
+    ocp_instance_id: "{{ ocp_install_state | json_query('\"*installconfig.ClusterID\".InfraID') }}"
+
+- name: Populate aws_cluster_tag
+  set_fact:
     aws_cluster_tag: "kubernetes.io/cluster/{{ ocp_instance_id }}"
 
 - name: Collect instance facts
   community.aws.ec2_instance_info:
     region: "{{ aws_region }}"
-    filter:
+    filters:
       instance-state-name: stopped
-      tag-key: "{{ ocp_instance_id }}"
+      tag-key: "{{ aws_cluster_tag }}"
   register: ec2_info
 
 # - debug:
