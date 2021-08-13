@@ -1,0 +1,9 @@
+---
+# defaults file for ocp-aws
+aws_create_cluster: true
+aws_cluster_base_directory: "~/tmp/"
+aws_cluster_name: "ocp"
+aws_base_domain: "aws.local"
+aws_region: eu-central-1
+aws_ssh_key: ""
+aws_ocp_pull_secret: ""

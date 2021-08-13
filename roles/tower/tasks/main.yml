@@ -1,13 +1,25 @@
 ---
 # tasks file for tower
-# - name: Upload manifest.zip
-#   ansible.tower.tower_license:
-#     tower_host: "{{ tower_host }}"
-#     tower_username: "{{ tower_username }}"
-#     tower_password: "{{ tower_password }}"
-#     manifest: "{{ tower_zip}}"
-#     force: yes
-#     validate_certs: no
+- name: Deploy TNTInfra root ca
+  template:
+    src: tntinfra.crt.j2
+    dest: /etc/pki/ca-trust/source/anchors/tntinfra.crt
+  register: tower_deployed_ca
+
+- name: Run update-ca-trust if required
+  command: /usr/bin/update-ca-trust
+  when: tower_deployed_ca.changed
+
+- include_tasks: aws-venv.yaml
+
+- name: Upload manifest.zip
+  ansible.tower.tower_license:
+    tower_host: "{{ tower_host }}"
+    tower_username: "{{ tower_username }}"
+    tower_password: "{{ tower_password }}"
+    manifest: "{{ tower_zip}}"
+    force: yes
+    validate_certs: no
 
 - name: Set the tower url in settings
   ansible.tower.tower_settings:

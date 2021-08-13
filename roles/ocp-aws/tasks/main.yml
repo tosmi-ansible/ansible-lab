@@ -1,0 +1,6 @@
+---
+- include_tasks: create_cluster.yaml
+  when: aws_create_cluster|bool
+
+- include_tasks: destroy_cluster.yaml
+  when: not aws_create_cluster|bool

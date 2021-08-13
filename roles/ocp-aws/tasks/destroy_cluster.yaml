@@ -1,0 +1,4 @@
+- name: Create the cluster
+  command: ./openshift-install destroy cluster --dir="{{ aws_cluster_base_directory }}/{{ aws_cluster_name }}"
+  args:
+    chdir: "{{ aws_cluster_base_directory }}/{{ aws_cluster_name }}"

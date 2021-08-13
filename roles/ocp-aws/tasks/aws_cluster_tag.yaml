@@ -1,0 +1,29 @@
+- name: Populate ocp_install_state_file
+  set_fact:
+    ocp_install_state_file: "{{ aws_cluster_base_directory }}/{{ aws_cluster_name }}/.openshift_install_state.json"
+
+- name: Check if openshift_install_state.json exists
+  stat:
+    path: "{{ ocp_install_state_file }}"
+  register: ocp_install_state
+
+- name: Fail if OpenShift install state does not exists
+  fail:
+    msg: "Could not find install state"
+  when: not ocp_install_state.stat.exists
+
+- name: Read OpenShift install state
+  command: "cat {{ ocp_install_state_file }}"
+  register: ocp_install_state_raw
+
+- name: Convert install state to json
+  set_fact:
+    ocp_install_state: "{{ ocp_install_state_raw.stdout | from_json }}"
+
+- name: Query install state for cluster ID
+  set_fact:
+    ocp_instance_id: "{{ ocp_install_state | json_query('\"*installconfig.ClusterID\".InfraID') }}"
+
+- name: Populate aws_cluster_tag
+  set_fact:
+    aws_cluster_tag: "kubernetes.io/cluster/{{ ocp_instance_id }}"

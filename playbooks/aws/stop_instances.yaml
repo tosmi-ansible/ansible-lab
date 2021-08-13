@@ -1,0 +1,8 @@
+- name: Stop all EC2 instances
+  hosts: localhost
+  gather_facts: no
+  tasks:
+    - name: Stop all OCP EC2 instances
+      include_role:
+        name: ocp-aws
+        tasks_from: stop_instances

@@ -1,0 +1,23 @@
+- include_tasks: aws_cluster_tag.yaml
+
+- name: Collect instance facts
+  community.aws.ec2_instance_info:
+    aws_access_key: "{{ aws_access_key_id }}"
+    aws_secret_key: "{{ aws_secret_access_key }}"
+    region: "{{ aws_region }}"
+    filters:
+      instance-state-name: stopped
+      tag-key: "{{ aws_cluster_tag }}"
+  register: ec2_info
+
+- name: Populate instance id's
+  set_fact:
+    aws_instance_ids: "{{ ec2_info.instances | json_query('[*].instance_id')}}"
+
+- name: Start instances
+  community.aws.ec2_instance:
+    aws_access_key: "{{ aws_access_key_id }}"
+    aws_secret_key: "{{ aws_secret_access_key }}"
+    instance_ids: "{{ aws_instance_ids }}"
+    state: started
+    region: "{{ aws_region }}"

@@ -1,0 +1,8 @@
+- name: Start OCP EC2 instances
+  hosts: all
+  gather_facts: no
+  tasks:
+    - name: Start all OCP EC2 instances
+      include_role:
+        name: ocp-aws
+        tasks_from: start_instances
