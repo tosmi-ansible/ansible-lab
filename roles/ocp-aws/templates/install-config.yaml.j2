@@ -6,8 +6,8 @@ compute:
   name: worker
   platform:
     aws:
-      type: m4.large
-  replicas: 3
+      type: {{ aws_ocp_worker_type }}
+  replicas: {{ aws_ocp_worker_replicas }}
 controlPlane:
   architecture: amd64
   hyperthreading: Enabled
@@ -24,7 +24,7 @@ networking:
   - cidr: 10.128.0.0/14
     hostPrefix: 23
   machineNetwork:
-  - cidr: 10.0.0.0/16
+  - cidr: "{{ aws_ocp_machine_network }}"
   networkType: OpenShiftSDN
   serviceNetwork:
   - 172.30.0.0/16

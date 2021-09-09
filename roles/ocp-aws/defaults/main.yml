@@ -7,3 +7,6 @@ aws_base_domain: "aws.local"
 aws_region: eu-central-1
 aws_ssh_key: ""
 aws_ocp_pull_secret: ""
+aws_ocp_worker_type: "m4.large"
+aws_ocp_worker_replias: 3
+aws_ocp_machine_network: "10.0.0.0/16"
