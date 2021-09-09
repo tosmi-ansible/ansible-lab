@@ -28,6 +28,6 @@
     dest: "{{ aws_cluster_base_directory }}/{{ aws_cluster_name }}/install-config.yaml"
 
 - name: Create the cluster
-  command: ./openshift-install create cluster --dir="{{ aws_cluster_base_directory }}/{{ aws_cluster_name }}"
+  command: ./openshift-install create cluster --dir=.
   args:
     chdir: "{{ aws_cluster_base_directory }}/{{ aws_cluster_name }}"
