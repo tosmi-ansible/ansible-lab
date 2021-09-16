@@ -1,3 +1,4 @@
 ---
 monitoring_node_exporter_version: 1.2.2
 monitoring_node_exporter_platform: amd64
+monitoring_node_exporter_dest: /usr/local/bin
