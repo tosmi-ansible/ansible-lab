@@ -1,0 +1,5 @@
+---
+- name: Install node exporter
+  unarchive:
+    src: "{{ montoring_node_exporter_base_url }}/v{{ monitoring_node_exporter_version}}/node_exporter-{{ monitoring_node_exporter_version}}.linux-{{ monitoring_node_exporter_platform }}.tar.gz
+    dest: /usr/local/bin
