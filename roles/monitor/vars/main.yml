@@ -1,0 +1,6 @@
+---
+monitor_prometheus_version: 2.30.0
+monitor_prometheus_platform: amd64
+monitor_prometheus_dest: /usr/local/bin
+monitor_prometheus_tsdb_path: /var/lib/prometheus
+monitor_prometheus_config_file: /etc/prometheus/prometheus.yaml

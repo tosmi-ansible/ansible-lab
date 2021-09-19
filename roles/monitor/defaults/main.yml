@@ -1,0 +1,3 @@
+---
+# defaults file for node-monitoring
+monitor_prometheus_base_url: https://github.com/prometheus/prometheus/releases/download/
