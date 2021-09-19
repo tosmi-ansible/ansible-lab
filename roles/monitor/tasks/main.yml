@@ -8,16 +8,18 @@
   get_url:
     url: "{{ monitor_prometheus_base_url }}/v{{ monitor_prometheus_version}}/prometheus-{{ monitor_prometheus_version}}.linux-{{ monitor_prometheus_platform }}.tar.gz"
     dest: /tmp/
+  register: monitor_prometheus_download
   when:
     - not monitor_prometheus_download.stat.exists
 
-- name: Extract node export to {{ monitor_prometheus_dest }}
+- name: Extract prometheus to {{ monitor_prometheus_dest }}
   unarchive:
     src: "/tmp/prometheus-{{ monitor_prometheus_version}}.linux-{{ monitor_prometheus_platform }}.tar.gz"
     dest: "{{ monitor_prometheus_dest }}"
     extra_opts:
       - --strip-components=1
     remote_src: yes
+  when: monitor_prometheus_download.changed
 
 - name: Install systemd prometheus.service
   copy:
@@ -55,13 +57,29 @@
     mode: '0700'
     state: directory
 
+- name: Create prometheus targets directory
+  file:
+    path: /etc/prometheus/targets
+    owner: prometheus
+    group: prometheus
+    mode: '0700'
+    state: directory
+
 - name: Deploy the prometheus configuration file
-  template:
+  copy:
     src: prometheus.yaml
-    dest: /etc/prometheus/prometheus.yaml
+    dest: "{{ monitor_prometheus_config_path }}/{{ monitor_prometheus_config_file }}"
     owner: prometheus
     group: prometheus
     mode: '0600'
+
+- name: Create prometheus data directory
+  file:
+    path: "{{ monitor_prometheus_tsdb_path }}"
+    owner: prometheus
+    group: prometheus
+    mode: '0700'
+    state: directory
 
 - name: Enable the prometheus systemd service
   service:

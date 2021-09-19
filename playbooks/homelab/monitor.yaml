@@ -31,4 +31,5 @@
   hosts: monitor.lan.stderr.at
   gather_facts: yes
   roles:
+    - monitoring
     - monitor

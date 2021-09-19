@@ -9,7 +9,6 @@ global:
   #   foo: bar
 
 rule_files:
-  - "first.rules"
   - "rules/*.rules"
 
 alerting:
@@ -64,20 +63,11 @@ scrape_configs:
     # metrics_path defaults to '/metrics'
     # scheme defaults to 'http'.
 
-    file_sd_configs:
-      - files:
-          - foo/*.slow.json
-          - foo/*.slow.yml
-          - single/file.yml
-        refresh_interval: 10m
-      - files:
-          - bar/*.yaml
-
     static_configs:
-      - targets: ["localhost:9090", "localhost:9191"]
-        labels:
-          my: label
-          your: label
+      - targets: ["localhost:9090", "localhost:9100"]
+        # labels:
+        #   my: label
+        #   your: label
 
     relabel_configs:
       - source_labels: [job, __meta_dns_name]
@@ -93,8 +83,15 @@ scrape_configs:
         replacement: static
         target_label: abc
 
-    authorization:
-      credentials_file: valid_token_file
+    # authorization:
+    #   credentials_file: valid_token_file
+
+  - job_name: targets
+
+    file_sd_configs:
+      - files:
+          - targets/*.yaml
+        refresh_interval: 30s
 
   # - job_name: service-x
 
