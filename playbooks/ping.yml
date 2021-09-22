@@ -1,5 +1,6 @@
 - name: A simple test playbook
-  host: localhost
+  hosts:
+    - localhost
   gather_facts: no
   tasks:
     - ping:
