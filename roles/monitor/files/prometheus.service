@@ -1,0 +1,10 @@
+[Unit]
+Description=Prometheus
+
+[Service]
+User=prometheus
+EnvironmentFile=/etc/sysconfig/prometheus
+ExecStart=/usr/local/bin/prometheus $OPTIONS
+
+[Install]
+WantedBy=multi-user.target

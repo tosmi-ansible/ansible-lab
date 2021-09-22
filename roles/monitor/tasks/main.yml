@@ -1,0 +1,88 @@
+---
+- name: Check if prometheus download is already at destination
+  stat:
+    path: "/tmp/prometheus-{{ monitor_prometheus_version}}.linux-{{ monitor_prometheus_platform }}.tar.gz"
+  register: monitor_prometheus_download
+
+- name: Download prometheus v{{ monitor_prometheus_version}}
+  get_url:
+    url: "{{ monitor_prometheus_base_url }}/v{{ monitor_prometheus_version}}/prometheus-{{ monitor_prometheus_version}}.linux-{{ monitor_prometheus_platform }}.tar.gz"
+    dest: /tmp/
+  register: monitor_prometheus_download
+  when:
+    - not monitor_prometheus_download.stat.exists
+
+- name: Extract prometheus to {{ monitor_prometheus_dest }}
+  unarchive:
+    src: "/tmp/prometheus-{{ monitor_prometheus_version}}.linux-{{ monitor_prometheus_platform }}.tar.gz"
+    dest: "{{ monitor_prometheus_dest }}"
+    extra_opts:
+      - --strip-components=1
+    remote_src: yes
+  when: monitor_prometheus_download.changed
+
+- name: Install systemd prometheus.service
+  copy:
+    src: prometheus.service
+    dest: /etc/systemd/system
+    owner: root
+    group: root
+    mode: '0644'
+  register: monitor_prometheus_systemd
+
+- name: Reload the systemd daemon
+  command: /usr/bin/systemctl daemon-reload
+  when: monitor_prometheus_systemd.changed
+
+- name: Create the prometheus user
+  user:
+    name: prometheus
+    comment: Prometheus exporter user
+    shell: /bin/nologin
+    uid: 9090
+
+- name: Deploy the sysconfig prometheus file
+  template:
+    src: sysconfig.prometheus.j2
+    dest: /etc/sysconfig/prometheus
+    owner: prometheus
+    group: prometheus
+    mode: '0600'
+
+- name: Create prometheus config directory
+  file:
+    path: /etc/prometheus
+    owner: prometheus
+    group: prometheus
+    mode: '0700'
+    state: directory
+
+- name: Create prometheus targets directory
+  file:
+    path: /etc/prometheus/targets
+    owner: prometheus
+    group: prometheus
+    mode: '0700'
+    state: directory
+
+- name: Deploy the prometheus configuration file
+  copy:
+    src: prometheus.yaml
+    dest: "{{ monitor_prometheus_config_path }}/{{ monitor_prometheus_config_file }}"
+    owner: prometheus
+    group: prometheus
+    mode: '0600'
+
+- name: Create prometheus data directory
+  file:
+    path: "{{ monitor_prometheus_tsdb_path }}"
+    owner: prometheus
+    group: prometheus
+    mode: '0700'
+    state: directory
+
+- name: Enable the prometheus systemd service
+  service:
+    name: prometheus
+    state: started
+    enabled: yes
