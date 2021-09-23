@@ -1,0 +1,8 @@
+---
+# tasks file for tower-testorg
+- name: Create {tower_sample_org_name}
+  awx.awx.tower_organization:
+    name: "{{ tower_sample_org_name}}"
+    tower_host: "{{ tower_host }}"
+    tower_username: "{{ tower_username }}"
+    tower_password: "{{ tower_password }}"
