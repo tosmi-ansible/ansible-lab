@@ -1,8 +1,54 @@
 ---
 # tasks file for tower-testorg
-- name: Create {tower_sample_org_name}
+- name: Create {{ tower_sample_org_name}}
   awx.awx.tower_organization:
     name: "{{ tower_sample_org_name}}"
     tower_host: "{{ tower_host }}"
     tower_username: "{{ tower_username }}"
     tower_password: "{{ tower_password }}"
+    validate_certs: no
+
+- name: Create teams in the {{ tower_sample_org_name }} organization
+  awx.awx.tower_team:
+    name: "{{ item }}"
+    organization: "{{ tower_sample_org_name }}"
+    tower_host: "{{ tower_host }}"
+    tower_username: "{{ tower_username }}"
+    tower_password: "{{ tower_password }}"
+    validate_certs: no
+  loop:
+    - Team 1
+    - Team 2
+
+- name: Create a simple inventory for the {{ tower_sample_org_name }} organization
+  awx.awx.tower_inventory:
+    name: "{{ tower_sample_org_name }} - Simple inventory"
+    organization: "{{ tower_sample_org_name }}"
+    tower_host: "{{ tower_host }}"
+    tower_username: "{{ tower_username }}"
+    tower_password: "{{ tower_password }}"
+    validate_certs: no
+
+- name: Create a project in the {{ tower_sample_org_name }} organization
+  awx.awx.tower_project:
+    name: "{{ tower_sample_org_name }} - project"
+    organization: "{{ tower_sample_org_name }}"
+    scm_type: git
+    scm_url: https://github.com/tosmi/ansible-test-playbooks.git
+    tower_host: "{{ tower_host }}"
+    tower_username: "{{ tower_username }}"
+    tower_password: "{{ tower_password }}"
+    validate_certs: no
+
+- name: Create a job template in the {{ tower_sample_org_name }} organization
+  awx.awx.tower_job_template:
+    name: "{{ tower_sample_org_name }} - ping"
+    job_type: run
+    organization: "{{ tower_sample_org_name }}"
+    project: "{{ tower_sample_org_name }} - project"
+    playbook: "playbooks/ping.yml"
+    inventory: "{{ tower_sample_org_name }} - Simple inventory"
+    tower_host: "{{ tower_host }}"
+    tower_username: "{{ tower_username }}"
+    tower_password: "{{ tower_password }}"
+    validate_certs: no
