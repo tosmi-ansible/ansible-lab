@@ -86,3 +86,6 @@
     name: prometheus
     state: started
     enabled: yes
+
+- name: Setup timescaledb
+  include_tasks: timescaledb.yml
