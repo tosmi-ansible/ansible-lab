@@ -1,0 +1,5 @@
+- name: Create a sample organization
+  hosts: localhost
+  gather_facts: no
+  roles:
+    - tower-sample

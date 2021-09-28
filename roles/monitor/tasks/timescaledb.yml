@@ -1,0 +1,23 @@
+---
+- name: Install the postgresql repo rpm
+  dnf:
+    name: 'https://download.postgresql.org/pub/repos/yum/reporpms/EL-8-x86_64/pgdg-redhat-repo-latest.noarch.rpm'
+    disable_gpg_check: yes
+
+- name: Enable the timescaledb repository
+  copy:
+    src: timescaledb.repo
+    dest: /etc/yum.repos.d/timescale_timescaledb.repo
+
+- name: Disable the CentOS PostgreSQL repo
+  ini_file:
+    path: /etc/dnf/modules.d/postgresql.module
+    section: postgresql
+    option: state
+    value: disabled
+    no_extra_spaces: yes
+
+- name: Install timescaledb 2
+  dnf:
+    name: timescaledb-2-postgresql-13
+    state: present
