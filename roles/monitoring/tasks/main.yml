@@ -52,3 +52,11 @@
     name: node_exporter
     state: started
     enabled: yes
+
+- name: Allow incoming connections to port 9100
+  ansible.posix.firewalld:
+    zone: public
+    port: 9100/tcp
+    permanent: yes
+    state: enabled
+    immediate: yes

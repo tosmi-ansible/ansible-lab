@@ -1,0 +1,10 @@
+[Unit]
+Description=SNMP Exporter
+
+[Service]
+User=snmp_exporter
+EnvironmentFile=/etc/sysconfig/snmp_exporter
+ExecStart=/usr/local/bin/snmp_exporter $OPTIONS
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,70 @@
+---
+- name: Check if node_export is already at destination
+  stat:
+    path: "/tmp/snmp_exporter-{{ monitor_snmp_exporter_version}}.linux-{{ monitor_snmp_exporter_platform }}.tar.gz"
+  register: monitor_snmp_exporter_download
+
+- name: Download snmp_exporter
+  get_url:
+    url: "{{ monitor_snmp_exporter_base_url }}/v{{ monitor_snmp_exporter_version}}/snmp_exporter-{{ monitor_snmp_exporter_version}}.linux-{{ monitor_snmp_exporter_platform }}.tar.gz"
+    dest: /tmp/
+  when:
+    - not monitor_snmp_exporter_download.stat.exists
+
+- name: Extract snmp exporter to {{ monitor_snmp_exporter_dest }}
+  unarchive:
+    src: "/tmp/snmp_exporter-{{ monitor_snmp_exporter_version}}.linux-{{ monitor_snmp_exporter_platform }}.tar.gz"
+    dest: "{{ monitor_snmp_exporter_dest }}"
+    extra_opts:
+      - --strip-components=1
+    remote_src: yes
+
+- name: Install systemd snmp_exporter.service
+  copy:
+    src: snmp_exporter.service
+    dest: /etc/systemd/system
+    owner: root
+    group: root
+    mode: '0644'
+  register: monitor_snmp_exporter_systemd
+
+- name: Reload the systemd daemon
+  command: /usr/bin/systemctl daemon-reload
+  when: monitor_snmp_exporter_systemd.changed
+
+- name: Deploy the sysconfig snmp_exporter file
+  copy:
+    src: sysconfig.snmp_exporter
+    dest: /etc/sysconfig/snmp_exporter
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: Create the snmp_exporter user
+  user:
+    name: snmp_exporter
+    comment: Node exporter user
+    shell: /bin/nologin
+    uid: 9116
+
+- name: Create snmp_exporter config directory
+  file:
+    path: /etc/snmp_exporter
+    owner: snmp_exporter
+    group: snmp_exporter
+    mode: '0750'
+    state: directory
+
+- name: Deploy snmp.yaml for snmp_exporter
+  copy:
+    src: snmp-synology.yml
+    dest: /etc/snmp_exporter/snmp.yml
+    owner: snmp_exporter
+    group: snmp_exporter
+    mode: '0640'
+
+- name: Enable the snmp_exporter systemd service
+  service:
+    name: snmp_exporter
+    state: started
+    enabled: yes

@@ -1,0 +1,12 @@
+---
+# tasks file for base
+- name: Install required packages
+  dnf:
+    name:
+      - firewalld
+
+- name: Enable firewalld
+  service:
+    name: firewalld
+    state: started
+    enabled: yes

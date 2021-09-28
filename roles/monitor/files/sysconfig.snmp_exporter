@@ -1,0 +1,1 @@
+OPTIONS="--config.file=/etc/snmp_exporter/snmp.yml"

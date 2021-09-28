@@ -1,0 +1,19 @@
+---
+- name: Install the grafana rpm
+  dnf:
+    name: "{{ monitor_grafana_base_url }}/grafana-enterprise-{{ monitor_grafana_version}}.{{monitor_grafana_platform}}.rpm"
+    state: installed
+    disable_gpg_check: yes
+  register: monitor_grafana_installation
+
+- name: Reload systemd
+  command: /usr/bin/systemctl daemon-reload
+  when: monitor_grafana_installation.changed
+
+- name: Allow incoming connections to port 3000
+  ansible.posix.firewalld:
+    zone: public
+    port: 3000/tcp
+    permanent: yes
+    state: enabled
+    immediate: yes

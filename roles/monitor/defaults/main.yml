@@ -1,3 +1,5 @@
 ---
 # defaults file for node-monitoring
 monitor_prometheus_base_url: https://github.com/prometheus/prometheus/releases/download/
+monitor_grafana_base_url: https://dl.grafana.com/enterprise/release
+monitor_snmp_exporter_base_url: https://github.com/prometheus/snmp_exporter/releases/download/

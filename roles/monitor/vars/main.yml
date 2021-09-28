@@ -5,3 +5,10 @@ monitor_prometheus_dest: /usr/local/bin
 monitor_prometheus_tsdb_path: /var/lib/prometheus
 monitor_prometheus_config_path: /etc/prometheus
 monitor_prometheus_config_file: prometheus.yaml
+
+monitor_grafana_version: 8.1.4-1
+monitor_grafana_platform: x86_64
+
+monitor_snmp_exporter_version: 0.20.0
+monitor_snmp_exporter_platform: amd64
+monitor_snmp_exporter_dest: /usr/local/bin
