@@ -93,6 +93,75 @@ scrape_configs:
           - targets/*.yaml
         refresh_interval: 30s
 
+  - job_name: gitlab-nginx
+
+    static_configs:
+      - targets:
+        - 10.0.0.251:8060
+
+  - job_name: gitlab-redis
+
+    static_configs:
+      - targets:
+        - 10.0.0.251:9121
+
+  - job_name: gitlab-postgres
+
+    static_configs:
+      - targets:
+        - 10.0.0.251:9187
+
+  - job_name: gitlab-node
+
+    static_configs:
+      - targets:
+        - 10.0.0.251:9100
+
+  - job_name: gitlab-workhorse
+
+    static_configs:
+      - targets:
+        - 10.0.0.251:9229
+
+  - job_name: gitlab-rails
+
+    metrics_path: "/-/metrics"
+    static_configs:
+      - targets:
+        - 10.0.0.251:8080
+
+  - job_name: gitlab-sidekiq
+
+    static_configs:
+      - targets:
+        - 10.0.0.251:8082
+  - job_name: gitlab_exporter_database
+
+    metrics_path: "/database"
+    static_configs:
+      - targets:
+        - 10.0.0.251:9168
+
+  - job_name: gitlab_exporter_sidekiq
+
+    metrics_path: "/sidekiq"
+    static_configs:
+      - targets:
+        - 10.0.0.251:9168
+
+  - job_name: gitlab_exporter_process
+
+    metrics_path: "/process"
+    static_configs:
+      - targets:
+        - 10.0.0.251:9168
+
+  - job_name: gitlab-gitaly
+
+    static_configs:
+      - targets:
+        - 10.0.0.251:9236
+
   # - job_name: service-x
 
   #   basic_auth:
@@ -240,7 +309,7 @@ scrape_configs:
   #   azure_sd_configs:
   #     - environment: AzurePublicCloud
   #       authentication_method: OAuth
-  #       subscription_id: 11AAAA11-A11A-111A-A111-1111A1111A11
+  #       subscription_id: 11AAAA11-A11A-111A-A10.0.0.1801A1111A11
   #       tenant_id: BBBB222B-B2B2-2B22-B222-2BB2222BB2B2
   #       client_id: 333333CC-3C33-3333-CCC3-33C3CCCCC33C
   #       client_secret: mysecret
@@ -330,13 +399,13 @@ scrape_configs:
   # - job_name: scaleway
   #   scaleway_sd_configs:
   #     - role: instance
-  #       project_id: 11111111-1111-1111-1111-111111111112
+  #       project_id: 10.0.0.1801-1111-1111-1111-111111111112
   #       access_key: SCWXXXXXXXXXXXXXXXXX
-  #       secret_key: 11111111-1111-1111-1111-111111111111
+  #       secret_key: 10.0.0.1801-1111-1111-1111-111111111111
   #     - role: baremetal
-  #       project_id: 11111111-1111-1111-1111-111111111112
+  #       project_id: 10.0.0.1801-1111-1111-1111-111111111112
   #       access_key: SCWXXXXXXXXXXXXXXXXX
-  #       secret_key: 11111111-1111-1111-1111-111111111111
+  #       secret_key: 10.0.0.1801-1111-1111-1111-111111111111
 
   # - job_name: linode-instances
   #   linode_sd_configs:
