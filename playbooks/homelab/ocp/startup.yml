@@ -1,5 +1,5 @@
 - name: start a cluster
-  hosts: localhost
+  hosts: fractal.lan.stderr.at
   become: no
   gather_facts: no
   tasks:
