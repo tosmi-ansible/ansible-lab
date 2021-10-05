@@ -31,7 +31,6 @@
         name: "{{ item }}"
         state: running
       loop:
-        - infra01
         - worker01
 
 - name: Start box01 hosts
@@ -45,7 +44,6 @@
         state: running
       loop:
         - stor01
-        - infra02
         - worker02
 
 - name: Start box02 hosts
@@ -60,7 +58,6 @@
       loop:
         - stor02
         - worker03
-        - worker04
 
 - name: Start box03 hosts
   hosts: box03.lan.stderr.at
@@ -73,3 +70,4 @@
         state: running
       loop:
         - stor03
+        - worker04

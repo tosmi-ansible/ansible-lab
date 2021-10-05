@@ -1,0 +1,6 @@
+- name: A simple test playbook
+  hosts:
+    - all
+  gather_facts: no
+  tasks:
+    - ping:
