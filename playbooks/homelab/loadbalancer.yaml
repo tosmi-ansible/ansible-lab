@@ -25,8 +25,9 @@
 #           image: rhel-8.3-update-2-x86_64-kvm.qcow2
 #   roles:
 #     - lab
+
 - name: Configure loadbalancer host
-  hosts: loadbalancer
+  hosts: loadbalancer.lan.stderr.at
   gather_facts: no
   roles:
     - loadbalancer

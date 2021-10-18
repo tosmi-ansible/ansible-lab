@@ -66,6 +66,14 @@ listen stats
     stats uri /
     monitor-uri /healthz
 
+listen postgresql
+    bind *:5432
+    default-server inter 3s fall 3
+    server worker01-pgsql worker01.lan.stderr.at:32101 check port 32101
+    server worker02-pgsql worker02.lan.stderr.at:32101 check port 32101
+    server worker03-pgsql worker03.lan.stderr.at:32101 check port 32101
+    server worker04-pgsql worker04.lan.stderr.at:32101 check port 32101
+
 frontend tower-http
     bind 10.0.0.212:80
     default_backend tower-http
