@@ -1,0 +1,27 @@
+- name: Start all VM's
+  hosts: all
+  become: no
+  gather_facts: no
+  tasks:
+    - name: List all stopped VM's
+      community.libvirt.virt:
+        command: list_vms
+        state: shutdown
+      register: stopped_vms
+
+    - name: Start VM's
+      virt:
+        name: "{{ item }}"
+        command: start
+        state: running
+      loop: "{{ stopped_vms.list_vms }}"
+
+    - name: Wait for VM's to shut down
+      virt:
+       name: "{{ item }}"
+       command: status
+      register: result
+      until: result.status == 'running'
+      delay: 5
+      retries: 720
+      loop: "{{ stopped_vms.list_vms }}"
