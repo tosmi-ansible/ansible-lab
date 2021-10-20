@@ -23,7 +23,7 @@ global
     #
     #    local2.*                       /var/log/haproxy.log
     #
-    log         127.0.0.1 local2
+    log         /dev/log local2 info
 
     chroot      /var/lib/haproxy
     pidfile     /var/run/haproxy.pid
@@ -67,6 +67,7 @@ listen stats
     monitor-uri /healthz
 
 listen postgresql
+    option tcplog
     bind *:5432
     default-server inter 3s fall 3
     server worker01-pgsql worker01.lan.stderr.at:32101 check port 32101

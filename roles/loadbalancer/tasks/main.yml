@@ -28,6 +28,12 @@
     immediate: yes
     state: enabled
 
+- name: Set SELinux haproxy_connect_any flag on and keep it persistent across reboots
+  ansible.posix.seboolean:
+    name: haproxy_connect_any
+    state: yes
+    persistent: yes
+
 - name: Deploy HAProxy config template
   template:
     src: haproxy.cfg.j2
