@@ -10,9 +10,3 @@
     name: firewalld
     state: started
     enabled: yes
-
-- name: test
-  file:
-    path: /test
-    owner: test
-    group:
