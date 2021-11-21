@@ -14,9 +14,9 @@
     content_overrides:
         - label: fast-datapath-for-rhel-8-x86_64-rpms
           override: enabled
-        - label: ansible-2.9-for-rhel-8-x86_64-rpms
+        - label: ansible-2-for-rhel-8-x86_64-rpms
           override: enabled
-        - label: satellite-tools-6.7-for-rhel-8-x86_64-rpms
+        - label: "satellite-tools-{{ satellite_tools_version }}-for-rhel-8-x86_64-rpms"
           override: enabled
     auto_attach: False
 
@@ -33,7 +33,7 @@
     subscriptions:
       - pool_id: "{{ satellite.pool_id }}"
     content_overrides:
-        - label: rhel-7-server-satellite-tools-6.7-rpms
+        - label: rhel-7-server-satellite-tools-6.9-rpms
           override: enabled
     auto_attach: False
 ...

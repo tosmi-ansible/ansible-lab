@@ -21,7 +21,7 @@
       manifest_path: "/tmp/manifest.zip"
   when: satellite_manifest_path is defined
 
-- name: "Create RedHat 8.2 Operating System"
+- name: "Create RedHat 8.5 Operating System"
   theforeman.foreman.operatingsystem:
     username: "{{ satellite_admin_username }}"
     password: "{{ satellite_admin_password }}"
@@ -30,7 +30,7 @@
     name: RedHat
     family: Redhat
     major: "8"
-    minor: "2"
+    minor: "{{ satellite_rhel8_os_minor_version }}"
     password_hash: SHA256
     state: present
 

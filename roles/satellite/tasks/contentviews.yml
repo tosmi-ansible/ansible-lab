@@ -21,9 +21,9 @@
     organization: "{{ satellite_organization }}"
     name: "CV: RHEL 8 kickstart"
     repositories:
-      - name: 'Red Hat Enterprise Linux 8 for x86_64 - AppStream Kickstart 8.2'
+      - name: 'Red Hat Enterprise Linux 8 for x86_64 - AppStream Kickstart 8.5'
         product: 'Red Hat Enterprise Linux for x86_64'
-      - name: 'Red Hat Enterprise Linux 8 for x86_64 - BaseOS Kickstart 8.2'
+      - name: 'Red Hat Enterprise Linux 8 for x86_64 - BaseOS Kickstart 8.5'
         product: 'Red Hat Enterprise Linux for x86_64'
   register: cv_rhel8kickstart
 
@@ -75,7 +75,7 @@
     organization: "{{ satellite_organization }}"
     name: "CV: RHEL 8 Satellite Tools"
     repositories:
-      - name: 'Red Hat Satellite Tools 6.7 for RHEL 8 x86_64 RPMs'
+      - name: "Red Hat Satellite Tools {{ satellite_tools_version }}  for RHEL 8 x86_64 RPMs"
         product: 'Red Hat Enterprise Linux for x86_64'
   register: cv_rhel8_sattools
 
@@ -125,7 +125,7 @@
     organization: "{{ satellite_organization }}"
     name: "CV: RHEL 8 Ansible"
     repositories:
-      - name: 'Red Hat Ansible Engine 2.9 for RHEL 8 x86_64 RPMs'
+      - name: 'Red Hat Ansible Engine 2 for RHEL 8 x86_64 RPMs'
         product: 'Red Hat Ansible Engine'
   register: cv_rhel8_ansible
 
