@@ -90,3 +90,4 @@
 - include_tasks: snmp_exporter.yml
 - include_tasks: grafana.yml
 - include_tasks: timescaledb.yml
+- include_tasks: nginx.yml
