@@ -1,0 +1,5 @@
+- name: Configure Lab Red Hat Satellite
+  hosts:
+    - satellite.lan.stderr.at
+  roles:
+    - satellite

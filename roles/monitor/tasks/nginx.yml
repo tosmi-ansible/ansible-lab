@@ -1,0 +1,58 @@
+---
+- name: Install nginx
+  dnf:
+    name: nginx
+    state: present
+
+- name: Enable httpd_can_network_connect for nginx
+  ansible.posix.seboolean:
+    name: httpd_can_network_connect
+    state: yes
+    persistent: yes
+
+- name: Enable httpd_can_network_connect for nginx
+  ansible.posix.seboolean:
+    name: httpd_can_network_connect
+    state: yes
+    persistent: yes
+
+- name: Permit traffic in default zone for http service
+  ansible.posix.firewalld:
+    service: http
+    permanent: yes
+    state: enabled
+
+- name: Permit traffic in default zone for https service
+  ansible.posix.firewalld:
+    service: https
+    permanent: yes
+    state: enabled
+
+- name: Deploy nginx SSL configuration
+  copy:
+    src: ssl.conf
+    dest: /etc/nginx/conf.d/ssl.conf
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: Deploy nginx SSL public key
+  copy:
+    dest: /etc/pki/nginx/server.crt
+    owner: root
+    group: root
+    mode: '0600'
+    content: "{{ nginx_server_crt }}"
+
+- name: Deploy nginx SSL private key
+  copy:
+    dest: /etc/pki/nginx/private/server.key
+    owner: root
+    group: root
+    mode: '0600'
+    content: "{{ nginx_server_key }}"
+
+- name: Restart nginx
+  service:
+    state: restarted
+    enabled: yes
