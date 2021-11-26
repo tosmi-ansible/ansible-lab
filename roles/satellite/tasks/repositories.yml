@@ -39,7 +39,7 @@
     organization: "{{ satellite_organization }}"
     label: "{{ item }}"
     repositories:
-      - releasever: "8.2"
+      - releasever: "8.5"
     state: enabled
   loop:
     - rhel-8-for-x86_64-baseos-kickstart
@@ -58,8 +58,8 @@
     state: enabled
   loop:
     - fast-datapath-for-rhel-8-x86_64-rpms
-    - ansible-2.9-for-rhel-8-x86_64-rpms
-    - satellite-tools-6.7-for-rhel-8-x86_64-rpms
+    - ansible-2-for-rhel-8-x86_64-rpms
+    - "satellite-tools-{{ satellite_tools_version }}-for-rhel-8-x86_64-rpms"
   register: rhel8_additional
 
 - name: "Sync RHEL 8 repositories"
