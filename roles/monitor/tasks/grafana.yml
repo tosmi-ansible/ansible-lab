@@ -1,4 +1,12 @@
 ---
+- name: Create grafana yum repo
+  copy:
+    src: grafana.repo
+    dest: /etc/yum.repos.d/grafana.repo
+    owner: root
+    group: root
+    mode: '0644'
+
 - name: Install the grafana rpm
   dnf:
     name: "{{ monitor_grafana_base_url }}/grafana-enterprise-{{ monitor_grafana_version}}.{{monitor_grafana_platform}}.rpm"
