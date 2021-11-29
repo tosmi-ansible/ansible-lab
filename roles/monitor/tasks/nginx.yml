@@ -36,18 +36,22 @@
     group: root
     mode: '0644'
 
+# XXX prometheus uses the same cert
+# currently we just chown the cert
 - name: Deploy nginx SSL public key
   copy:
     dest: /etc/pki/nginx/server.crt
-    owner: root
+    owner: prometheus
     group: root
     mode: '0600'
     content: "{{ nginx_server_crt }}"
 
+# XXX prometheus uses the same cert
+# currently we just chown the cert
 - name: Deploy nginx SSL private key
   copy:
     dest: /etc/pki/nginx/private/server.key
-    owner: root
+    owner: prometheus
     group: root
     mode: '0600'
     content: "{{ nginx_server_key }}"

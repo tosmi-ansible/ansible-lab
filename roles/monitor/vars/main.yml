@@ -5,6 +5,7 @@ monitor_prometheus_dest: /usr/local/bin
 monitor_prometheus_tsdb_path: /var/lib/prometheus
 monitor_prometheus_config_path: /etc/prometheus
 monitor_prometheus_config_file: prometheus.yaml
+monitor_prometheus_web_config_file: web-config.yaml
 
 monitor_grafana_version: 8.1.4-1
 monitor_grafana_platform: x86_64
