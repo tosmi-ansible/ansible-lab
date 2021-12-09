@@ -53,6 +53,11 @@
     state: started
     enabled: yes
 
+- name: Check if firewalld package is install
+  yum:
+    list: firewalld
+  register: firewalld_package
+
 - name: Allow incoming connections to port 9100
   ansible.posix.firewalld:
     zone: public
@@ -60,3 +65,4 @@
     permanent: yes
     state: enabled
     immediate: yes
+  when: firewalld_package.results | length > 0

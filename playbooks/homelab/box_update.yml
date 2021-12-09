@@ -1,0 +1,11 @@
+- name: setup virtualization box
+  become: yes
+  gather_facts: no
+  hosts:
+    - boxes
+  tasks:
+    - name: Register with activationkey and consume subscriptions matching Red Hat Enterprise Server or Red Hat Virtualization
+      community.general.redhat_subscription:
+        state: present
+        org_id: "Lab"
+        activationkey: "RHEL8"

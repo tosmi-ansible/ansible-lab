@@ -4,7 +4,7 @@
 #   theforeman.foreman.resource_info:
 #     username: "{{ satellite_admin_username }}"
 #     password: "{{ satellite_admin_password }}"
-#     server_url: "{{ satellite.url}}"
+#     server_url: "{{ satellite_url}}"
 #     validate_certs: false
 #     organization: "{{ satellite_organization }}"
 #     resource: repository_sets
@@ -18,7 +18,7 @@
   theforeman.foreman.repository_set:
     username: "{{ satellite_admin_username }}"
     password: "{{ satellite_admin_password }}"
-    server_url: "{{ satellite.url}}"
+    server_url: "{{ satellite_url}}"
     validate_certs: false
     organization: "{{ satellite_organization }}"
     label: "{{ item }}"
@@ -34,7 +34,7 @@
   theforeman.foreman.repository_set:
     username: "{{ satellite_admin_username }}"
     password: "{{ satellite_admin_password }}"
-    server_url: "{{ satellite.url}}"
+    server_url: "{{ satellite_url}}"
     validate_certs: false
     organization: "{{ satellite_organization }}"
     label: "{{ item }}"
@@ -50,7 +50,7 @@
   theforeman.foreman.repository_set:
     username: "{{ satellite_admin_username }}"
     password: "{{ satellite_admin_password }}"
-    server_url: "{{ satellite.url}}"
+    server_url: "{{ satellite_url}}"
     validate_certs: false
     organization: "{{ satellite_organization }}"
     label: "{{ item }}"
@@ -66,7 +66,7 @@
   theforeman.foreman.repository_sync:
     username: "{{ satellite_admin_username }}"
     password: "{{ satellite_admin_password }}"
-    server_url: "{{ satellite.url}}"
+    server_url: "{{ satellite_url}}"
     validate_certs: false
     product: "{{ item }}"
     organization: "Lab"
@@ -76,12 +76,12 @@
     - "Red Hat Enterprise Linux for x86_64"
   when: (rhel8_repos.changed or rhel8_kickstart.changed or rhel8_additional.changed)
 
-# must all_repositories to no, and specify exact repo. other we enable all rhel 7 repos (7.0 - 7.n)
+# must set all_repositories to no, and specify exact repo. other we enable all rhel 7 repos (7.0 - 7.n)
 - name: Enable RHEL 7 Server repo
   theforeman.foreman.repository_set:
     username: "{{ satellite_admin_username }}"
     password: "{{ satellite_admin_password }}"
-    server_url: "{{ satellite.url}}"
+    server_url: "{{ satellite_url}}"
     validate_certs: false
     organization: "{{ satellite_organization }}"
     label: rhel-7-server-rpms
@@ -97,7 +97,7 @@
   theforeman.foreman.repository_set:
     username: "{{ satellite_admin_username }}"
     password: "{{ satellite_admin_password }}"
-    server_url: "{{ satellite.url}}"
+    server_url: "{{ satellite_url}}"
     validate_certs: false
     organization: "{{ satellite_organization }}"
     label: "{{ item }}"
@@ -112,7 +112,7 @@
   theforeman.foreman.repository_sync:
     username: "{{ satellite_admin_username }}"
     password: "{{ satellite_admin_password }}"
-    server_url: "{{ satellite.url}}"
+    server_url: "{{ satellite_url}}"
     validate_certs: false
     product: "{{ item }}"
     organization: "Lab"

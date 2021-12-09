@@ -14,7 +14,7 @@
     theforeman.foreman.subscription_manifest:
       username: "{{ satellite_admin_username }}"
       password: "{{ satellite_admin_password }}"
-      server_url: "{{ satellite.url}}"
+      server_url: "{{ satellite_url}}"
       validate_certs: false
       organization: "{{ satellite_organization }}"
       state: present
@@ -25,7 +25,7 @@
   theforeman.foreman.operatingsystem:
     username: "{{ satellite_admin_username }}"
     password: "{{ satellite_admin_password }}"
-    server_url: "{{ satellite.url}}"
+    server_url: "{{ satellite_url}}"
     validate_certs: false
     name: RedHat
     family: Redhat
@@ -43,8 +43,12 @@
 - name: Configure content views
   include_tasks: contentviews.yml
 
+- name: Publish RHEL 8 content views
+  include_tasks: publish_rhel8.yml
+
 - name: Configure RHEL 7 content views
   include_tasks: contentviews_rhel7.yml
 
-- name: Configure activation keys
-  include_tasks: activationkeys.yml
+# disabled for now (2021-12-01)
+#- name: Configure activation keys
+#  include_tasks: activationkeys.yml

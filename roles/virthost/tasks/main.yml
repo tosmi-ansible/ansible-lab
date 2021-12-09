@@ -1,56 +1,29 @@
 ---
 - include_tasks: satellite_register.yml
-  when: virthost_satellite_register|bool
+  when:
+    - action == "setup"
+    - virthost_satellite_register|bool
 
-- name: install required packages
-  dnf:
-    name:
-      - "@Virtualization Host"
-      - podman
-      - virt-install
-      - virt-manager
-      - libguestfs-tools
-      - virt-viewer
-      - xauth
-      - python3-lxml
-      - tmux
-      - bind-utils
-      - dnsmasq
-      - tigervnc
-      - tigervnc-server
-      - xterm
-    state: present
-
-- name: create vnc user
-  user:
-    name: vnc
-    groups: wheel
-
-- name: enable and start libvirtd
-  systemd:
-    name: libvirtd
-    state: started
-    enabled: True
-
-- name: create libvirt hooks directory
-  file:
-    path: /etc/libvirt/hooks
-    state: directory
-    mode: '0755'
-    owner: root
-    group: root
-
-- name: deploy libvirt network hook script to allow vpn access
-  template:
-    src: network.j2
-    dest: /etc/libvirt/hooks/network
-    mode: '0755'
-    owner: root
-    group: root
-  when: virthost_vpn_ifname is defined
+- include_tasks: setup.yml
+  when:
+    - action == "setup"
 
 - include_tasks: bridge.yml
-  when: virthost_configure_bridge|bool
+  when:
+    - action == "setup"
+    - virthost_configure_bridge|bool
 
 - name: Configure filesystems
   include_tasks: filesystems.yml
+  when:
+    - action == "setup"
+
+- include_tasks: shutdown_vms.yml
+  when:
+    - action == "shutdown-vms"
+
+- name: Reboot virt host
+  reboot:
+    reboot_timeout: 600
+  when:
+    - action == "reboot"

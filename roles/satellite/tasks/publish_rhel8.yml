@@ -1,0 +1,72 @@
+- name: "Publish new version of the RHEL 8 kickstart content view"
+  theforeman.foreman.content_view_version:
+    username: "{{ satellite_admin_username }}"
+    password: "{{ satellite_admin_password }}"
+    server_url: "{{ satellite_url}}"
+    validate_certs: false
+    organization: "{{ satellite_organization }}"
+    content_view: "CV: RHEL 8 kickstart"
+    lifecycle_environments:
+      - Library
+  when: cv_rhel8kickstart.changed
+
+- name: Update RHEL 8
+  block:
+
+  - name: "Publish new version of the RHEL 8 content view"
+    theforeman.foreman.content_view_version:
+      username: "{{ satellite_admin_username }}"
+      password: "{{ satellite_admin_password }}"
+      server_url: "{{ satellite_url}}"
+      validate_certs: false
+      organization: "{{ satellite_organization }}"
+      content_view: "CV: RHEL 8"
+      lifecycle_environments:
+        - Library
+
+  - name: "Publish new version of the RHEL 8 Satellite Tools content view"
+    theforeman.foreman.content_view_version:
+      username: "{{ satellite_admin_username }}"
+      password: "{{ satellite_admin_password }}"
+      server_url: "{{ satellite_url}}"
+      validate_certs: false
+      organization: "{{ satellite_organization }}"
+      content_view: "CV: RHEL 8 Satellite Tools"
+      lifecycle_environments:
+        - Library
+
+  - name: "Publish new version of the RHEL 8 Fast Datapath content view"
+    theforeman.foreman.content_view_version:
+      username: "{{ satellite_admin_username }}"
+      password: "{{ satellite_admin_password }}"
+      server_url: "{{ satellite_url}}"
+      validate_certs: false
+      organization: "{{ satellite_organization }}"
+      content_view: "CV: RHEL 8 Fast Datapath"
+      lifecycle_environments:
+        - Library
+
+  - name: "Publish new version of the RHEL 8 Ansible content view"
+    theforeman.foreman.content_view_version:
+      username: "{{ satellite_admin_username }}"
+      password: "{{ satellite_admin_password }}"
+      server_url: "{{ satellite_url}}"
+      validate_certs: false
+      organization: "{{ satellite_organization }}"
+      content_view: "CV: RHEL 8 Ansible"
+      lifecycle_environments:
+        - Library
+
+  - name: "Publish new version of the RHEL 8 composite content view"
+    theforeman.foreman.content_view_version:
+      username: "{{ satellite_admin_username }}"
+      password: "{{ satellite_admin_password }}"
+      server_url: "{{ satellite_url}}"
+      validate_certs: false
+      organization: "{{ satellite_organization }}"
+      content_view: "CCV: RHEL 8"
+      lifecycle_environments:
+        - Library
+        - Lab
+
+  when: ccv_rhel8.changed or satellite_rhel8_update

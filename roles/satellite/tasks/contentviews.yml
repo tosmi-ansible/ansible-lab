@@ -3,7 +3,7 @@
   theforeman.foreman.lifecycle_environment:
     username: "{{ satellite_admin_username }}"
     password: "{{ satellite_admin_password }}"
-    server_url: "{{ satellite.url}}"
+    server_url: "{{ satellite_url}}"
     validate_certs: false
     organization: "{{ satellite_organization }}"
     name: "Lab"
@@ -16,7 +16,7 @@
   theforeman.foreman.content_view:
     username: "{{ satellite_admin_username }}"
     password: "{{ satellite_admin_password }}"
-    server_url: "{{ satellite.url}}"
+    server_url: "{{ satellite_url}}"
     validate_certs: false
     organization: "{{ satellite_organization }}"
     name: "CV: RHEL 8 kickstart"
@@ -27,23 +27,11 @@
         product: 'Red Hat Enterprise Linux for x86_64'
   register: cv_rhel8kickstart
 
-- name: "Publish an initial version of the RHEL 8 kickstart content view"
-  theforeman.foreman.content_view_version:
-    username: "{{ satellite_admin_username }}"
-    password: "{{ satellite_admin_password }}"
-    server_url: "{{ satellite.url}}"
-    validate_certs: false
-    organization: "{{ satellite_organization }}"
-    content_view: "CV: RHEL 8 kickstart"
-    lifecycle_environments:
-      - Library
-  when: cv_rhel8kickstart.changed
-
 - name: Create content views for RHEL 8 (baseos + appstream)
   theforeman.foreman.content_view:
     username: "{{ satellite_admin_username }}"
     password: "{{ satellite_admin_password }}"
-    server_url: "{{ satellite.url}}"
+    server_url: "{{ satellite_url}}"
     validate_certs: false
     organization: "{{ satellite_organization }}"
     name: "CV: RHEL 8"
@@ -54,48 +42,24 @@
         product: 'Red Hat Enterprise Linux for x86_64'
   register: cv_rhel8
 
-- name: "Publish an initial version of the RHEL 8 content view"
-  theforeman.foreman.content_view_version:
-    username: "{{ satellite_admin_username }}"
-    password: "{{ satellite_admin_password }}"
-    server_url: "{{ satellite.url}}"
-    validate_certs: false
-    organization: "{{ satellite_organization }}"
-    content_view: "CV: RHEL 8"
-    lifecycle_environments:
-      - Library
-  when: cv_rhel8.changed
-
 - name: Create content view for RHEL 8 satellite tools
   theforeman.foreman.content_view:
     username: "{{ satellite_admin_username }}"
     password: "{{ satellite_admin_password }}"
-    server_url: "{{ satellite.url}}"
+    server_url: "{{ satellite_url}}"
     validate_certs: false
     organization: "{{ satellite_organization }}"
     name: "CV: RHEL 8 Satellite Tools"
     repositories:
-      - name: "Red Hat Satellite Tools {{ satellite_tools_version }}  for RHEL 8 x86_64 RPMs"
+      - name: "Red Hat Satellite Tools {{ satellite_tools_version }} for RHEL 8 x86_64 RPMs"
         product: 'Red Hat Enterprise Linux for x86_64'
   register: cv_rhel8_sattools
-
-- name: "Publish an initial version of the RHEL 8 kickstart content view"
-  theforeman.foreman.content_view_version:
-    username: "{{ satellite_admin_username }}"
-    password: "{{ satellite_admin_password }}"
-    server_url: "{{ satellite.url}}"
-    validate_certs: false
-    organization: "{{ satellite_organization }}"
-    content_view: "CV: RHEL 8 Satellite Tools"
-    lifecycle_environments:
-      - Library
-  when: cv_rhel8_sattools.changed
 
 - name: Create content views for RHEL 8 fast datapath
   theforeman.foreman.content_view:
     username: "{{ satellite_admin_username }}"
     password: "{{ satellite_admin_password }}"
-    server_url: "{{ satellite.url}}"
+    server_url: "{{ satellite_url}}"
     validate_certs: false
     organization: "{{ satellite_organization }}"
     name: "CV: RHEL 8 Fast Datapath"
@@ -104,23 +68,11 @@
         product: 'Red Hat Enterprise Linux Fast Datapath'
   register: cv_rhel8_datapath
 
-- name: "Publish an initial version of the RHEL 8 Fast Datapath content view"
-  theforeman.foreman.content_view_version:
-    username: "{{ satellite_admin_username }}"
-    password: "{{ satellite_admin_password }}"
-    server_url: "{{ satellite.url}}"
-    validate_certs: false
-    organization: "{{ satellite_organization }}"
-    content_view: "CV: RHEL 8 Fast Datapath"
-    lifecycle_environments:
-      - Library
-  when: cv_rhel8_datapath.changed
-
 - name: Create content views for RHEL 8 Ansible
   theforeman.foreman.content_view:
     username: "{{ satellite_admin_username }}"
     password: "{{ satellite_admin_password }}"
-    server_url: "{{ satellite.url}}"
+    server_url: "{{ satellite_url}}"
     validate_certs: false
     organization: "{{ satellite_organization }}"
     name: "CV: RHEL 8 Ansible"
@@ -129,23 +81,11 @@
         product: 'Red Hat Ansible Engine'
   register: cv_rhel8_ansible
 
-- name: "Publish an initial version of the RHEL 8 Ansible content view"
-  theforeman.foreman.content_view_version:
-    username: "{{ satellite_admin_username }}"
-    password: "{{ satellite_admin_password }}"
-    server_url: "{{ satellite.url}}"
-    validate_certs: false
-    organization: "{{ satellite_organization }}"
-    content_view: "CV: RHEL 8 Ansible"
-    lifecycle_environments:
-      - Library
-  when: cv_rhel8_ansible.changed
-
 - name: "Create a composite content view for RHEL 8 RHEV"
   theforeman.foreman.content_view:
     username: "{{ satellite_admin_username }}"
     password: "{{ satellite_admin_password }}"
-    server_url: "{{ satellite.url}}"
+    server_url: "{{ satellite_url}}"
     validate_certs: false
     organization: "{{ satellite_organization }}"
     name: "CCV: RHEL 8 RHEV"
@@ -164,7 +104,7 @@
   theforeman.foreman.content_view:
     username: "{{ satellite_admin_username }}"
     password: "{{ satellite_admin_password }}"
-    server_url: "{{ satellite.url}}"
+    server_url: "{{ satellite_url}}"
     validate_certs: false
     organization: "{{ satellite_organization }}"
     name: "CCV: RHEL 8"
@@ -181,16 +121,4 @@
         latest: true
   register: ccv_rhel8
 
-- name: "Publish an initial version of the RHEL 8 composite content view"
-  theforeman.foreman.content_view_version:
-    username: "{{ satellite_admin_username }}"
-    password: "{{ satellite_admin_password }}"
-    server_url: "{{ satellite.url}}"
-    validate_certs: false
-    organization: "{{ satellite_organization }}"
-    content_view: "CCV: RHEL 8"
-    lifecycle_environments:
-      - Library
-      - Lab
-  when: ccv_rhel8.changed
 ...

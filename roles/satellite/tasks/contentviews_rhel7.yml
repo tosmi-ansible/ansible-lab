@@ -3,7 +3,7 @@
   theforeman.foreman.content_view:
     username: "{{ satellite_admin_username }}"
     password: "{{ satellite_admin_password }}"
-    server_url: "{{ satellite.url}}"
+    server_url: "{{ satellite_url}}"
     validate_certs: false
     organization: "{{ satellite_organization }}"
     name: "CV: RHEL 7"
@@ -18,7 +18,7 @@
   theforeman.foreman.content_view_version:
     username: "{{ satellite_admin_username }}"
     password: "{{ satellite_admin_password }}"
-    server_url: "{{ satellite.url}}"
+    server_url: "{{ satellite_url}}"
     validate_certs: false
     organization: "{{ satellite_organization }}"
     content_view: "CV: RHEL 7"
@@ -30,7 +30,7 @@
   theforeman.foreman.content_view:
     username: "{{ satellite_admin_username }}"
     password: "{{ satellite_admin_password }}"
-    server_url: "{{ satellite.url}}"
+    server_url: "{{ satellite_url}}"
     validate_certs: false
     organization: "{{ satellite_organization }}"
     name: "CV: RHEL 7 Satellite Tools"
@@ -43,7 +43,7 @@
   theforeman.foreman.content_view_version:
     username: "{{ satellite_admin_username }}"
     password: "{{ satellite_admin_password }}"
-    server_url: "{{ satellite.url}}"
+    server_url: "{{ satellite_url}}"
     validate_certs: false
     organization: "{{ satellite_organization }}"
     content_view: "CV: RHEL 7 Satellite Tools"
@@ -56,7 +56,7 @@
   theforeman.foreman.content_view:
     username: "{{ satellite_admin_username }}"
     password: "{{ satellite_admin_password }}"
-    server_url: "{{ satellite.url}}"
+    server_url: "{{ satellite_url}}"
     validate_certs: false
     organization: "{{ satellite_organization }}"
     name: "CCV: RHEL 7"
@@ -73,7 +73,7 @@
   theforeman.foreman.content_view_version:
     username: "{{ satellite_admin_username }}"
     password: "{{ satellite_admin_password }}"
-    server_url: "{{ satellite.url}}"
+    server_url: "{{ satellite_url}}"
     validate_certs: false
     organization: "{{ satellite_organization }}"
     content_view: "CCV: RHEL 7"

@@ -3,7 +3,7 @@
   theforeman.foreman.activation_key:
     username: "{{ satellite_admin_username }}"
     password: "{{ satellite_admin_password }}"
-    server_url: "{{ satellite.url}}"
+    server_url: "{{ satellite_url}}"
     validate_certs: false
     organization: "{{ satellite_organization }}"
     name: "RHEL 8"
@@ -24,7 +24,7 @@
   theforeman.foreman.activation_key:
     username: "{{ satellite_admin_username }}"
     password: "{{ satellite_admin_password }}"
-    server_url: "{{ satellite.url}}"
+    server_url: "{{ satellite_url}}"
     validate_certs: false
     organization: "{{ satellite_organization }}"
     name: "RHEL 7"

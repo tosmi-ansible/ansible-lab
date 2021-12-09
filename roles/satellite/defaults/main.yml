@@ -7,3 +7,5 @@ satellite_qpid_router_password: redhat
 satellite_candlepin_password: redhat
 satellite_db_password: redhat
 satellite_organization: Lab
+satellite_url: "https://localhost"
+satellite_rhel8_update: false
