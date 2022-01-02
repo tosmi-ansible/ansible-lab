@@ -1,0 +1,8 @@
+- name: setup virtualization box
+  become: yes
+  gather_facts: no
+  hosts:
+    - boxes
+  roles:
+    - { role: virthost, action: shutdown-vms }
+    - { role: virthost, action: shutdown }

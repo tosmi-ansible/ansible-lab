@@ -27,3 +27,8 @@
     reboot_timeout: 600
   when:
     - action == "reboot"
+
+- name: Poweroff box
+  shutdown:
+  when:
+    - action == "shutdown"
