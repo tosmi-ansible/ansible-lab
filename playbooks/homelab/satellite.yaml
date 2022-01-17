@@ -2,5 +2,5 @@
   hosts:
     - satellite.lan.stderr.at
   roles:
-    - monitoring
+    # - monitoring
     - satellite

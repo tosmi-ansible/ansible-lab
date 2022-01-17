@@ -1,6 +1,6 @@
 ---
 - name: Create content views for RHEL 7
-  theforeman.foreman.content_view:
+  redhat.satellite.content_view:
     username: "{{ satellite_admin_username }}"
     password: "{{ satellite_admin_password }}"
     server_url: "{{ satellite_url}}"
@@ -15,7 +15,7 @@
   register: cv_rhel7
 
 - name: "Publish an initial version of the RHEL 7 content view"
-  theforeman.foreman.content_view_version:
+  redhat.satellite.content_view_version:
     username: "{{ satellite_admin_username }}"
     password: "{{ satellite_admin_password }}"
     server_url: "{{ satellite_url}}"
@@ -27,7 +27,7 @@
   when: cv_rhel7.changed
 
 - name: Create content view for RHEL 7 satellite tools
-  theforeman.foreman.content_view:
+  redhat.satellite.content_view:
     username: "{{ satellite_admin_username }}"
     password: "{{ satellite_admin_password }}"
     server_url: "{{ satellite_url}}"
@@ -40,7 +40,7 @@
   register: cv_rhel7_sattools
 
 - name: "Publish an initial version of the RHEL 7 kickstart content view"
-  theforeman.foreman.content_view_version:
+  redhat.satellite.content_view_version:
     username: "{{ satellite_admin_username }}"
     password: "{{ satellite_admin_password }}"
     server_url: "{{ satellite_url}}"
@@ -53,7 +53,7 @@
 
 
 - name: "Create a composite content view for RHEL 7"
-  theforeman.foreman.content_view:
+  redhat.satellite.content_view:
     username: "{{ satellite_admin_username }}"
     password: "{{ satellite_admin_password }}"
     server_url: "{{ satellite_url}}"
@@ -70,7 +70,7 @@
   register: ccv_rhel7
 
 - name: "Publish an initial version of the RHEL 7 composite content view"
-  theforeman.foreman.content_view_version:
+  redhat.satellite.content_view_version:
     username: "{{ satellite_admin_username }}"
     password: "{{ satellite_admin_password }}"
     server_url: "{{ satellite_url}}"

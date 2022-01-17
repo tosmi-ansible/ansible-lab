@@ -11,7 +11,7 @@
       dest: /tmp/manifest.zip
 
   - name: "Upload satellite manifest"
-    theforeman.foreman.subscription_manifest:
+    redhat.satellite.subscription_manifest:
       username: "{{ satellite_admin_username }}"
       password: "{{ satellite_admin_password }}"
       server_url: "{{ satellite_url}}"
@@ -22,7 +22,7 @@
   when: satellite_manifest_path is defined
 
 - name: "Create RedHat 8.5 Operating System"
-  theforeman.foreman.operatingsystem:
+  redhat.satellite.operatingsystem:
     username: "{{ satellite_admin_username }}"
     password: "{{ satellite_admin_password }}"
     server_url: "{{ satellite_url}}"

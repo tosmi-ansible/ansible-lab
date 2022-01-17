@@ -1,6 +1,6 @@
 ---
 - name: "Create activation key RHEL 8"
-  theforeman.foreman.activation_key:
+  redhat.satellite.activation_key:
     username: "{{ satellite_admin_username }}"
     password: "{{ satellite_admin_password }}"
     server_url: "{{ satellite_url}}"
@@ -21,7 +21,7 @@
     auto_attach: False
 
 - name: "Create activation key RHEL 7"
-  theforeman.foreman.activation_key:
+  redhat.satellite.activation_key:
     username: "{{ satellite_admin_username }}"
     password: "{{ satellite_admin_password }}"
     server_url: "{{ satellite_url}}"
