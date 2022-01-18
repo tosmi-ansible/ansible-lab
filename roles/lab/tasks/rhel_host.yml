@@ -85,5 +85,5 @@
   when:
     - lab.network.type == "bridge"
 
-- include_tasks: inventory.yml
+# - include_tasks: inventory.yml
 - include_tasks: register.yml
