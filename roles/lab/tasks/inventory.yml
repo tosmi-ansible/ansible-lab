@@ -9,14 +9,3 @@
     ansible_user: "{{ lab_ssh_user | default('root')}}"
     ansible_ssh_common_args: '-o ProxyCommand="ssh -W %h:%p -q {{ lab_ssh_proxy }}"'
   when: lab_ssh_proxy != ""
-
-- name: Add {{ item.name }} to in memory inventory
-  add_host:
-    hostname: "{{ item.name }}"
-    ansible_host: "{{ item.ipaddr }}"
-  when: lab_ssh_proxy == ""
-
-- name: Wait for host to be accessible
-  wait_for:
-    port: 22
-    host: "{{ item.ipaddr }}"
