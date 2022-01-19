@@ -23,7 +23,7 @@
           memory: 5210
           cpu: 2
           register: yes
-          activationkey: RHEL 8
+          activationkey: RHEL8
           image: rhel-8.5-x86_64-kvm.qcow2
   roles:
     - lab
@@ -52,9 +52,8 @@
           memory: 5120
           cpu: 2
           register: yes
-          activationkey: RHEL 8
+          activationkey: RHEL8
           image: rhel-8.5-x86_64-kvm.qcow2
-      hosts:
         - name: automationhub
           network: bridge0
           macaddr: "52:54:00:01:52:29"
@@ -63,7 +62,7 @@
           memory: 5120
           cpu: 2
           register: yes
-          activationkey: RHEL 8
+          activationkey: RHEL8
           image: rhel-8.5-x86_64-kvm.qcow2
   roles:
      - lab
@@ -92,7 +91,7 @@
           memory: 5120
           cpu: 2
           register: yes
-          activationkey: RHEL 8
+          activationkey: RHEL8
           image: rhel-8.5-x86_64-kvm.qcow2
   roles:
      - lab
