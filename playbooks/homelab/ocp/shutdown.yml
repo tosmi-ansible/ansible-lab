@@ -123,8 +123,8 @@
         - master02
         - master03
 
-    - name: stop the bastion host
-      virt:
-        name: bastion
-        command: shutdown
-        state: shutdown
+   - name: stop the bastion host
+     virt:
+       name: bastion
+       command: shutdown
+       state: shutdown
