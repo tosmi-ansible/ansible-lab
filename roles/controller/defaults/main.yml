@@ -1,0 +1,5 @@
+---
+# defaults file for tower
+controller_host: tower.local
+controller_username: admin
+controller_password: redhat

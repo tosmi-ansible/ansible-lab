@@ -1,7 +1,7 @@
 # used for debugging
 #
 # - name: "Search for possible repository sets of a product"
-#   theforeman.foreman.resource_info:
+#   redhat.satellite.resource_info:
 #     username: "{{ satellite_admin_username }}"
 #     password: "{{ satellite_admin_password }}"
 #     server_url: "{{ satellite_url}}"
@@ -15,7 +15,7 @@
 #     var: data
 
 - name: Enable RHEL 8 OS repos
-  theforeman.foreman.repository_set:
+  redhat.satellite.repository_set:
     username: "{{ satellite_admin_username }}"
     password: "{{ satellite_admin_password }}"
     server_url: "{{ satellite_url}}"
@@ -31,7 +31,7 @@
   register: rhel8_repos
 
 - name: Enable kickstart RHEL 8 OS repos
-  theforeman.foreman.repository_set:
+  redhat.satellite.repository_set:
     username: "{{ satellite_admin_username }}"
     password: "{{ satellite_admin_password }}"
     server_url: "{{ satellite_url}}"
@@ -47,7 +47,7 @@
   register: rhel8_kickstart
 
 - name: Enable additional RHEL 8 repos
-  theforeman.foreman.repository_set:
+  redhat.satellite.repository_set:
     username: "{{ satellite_admin_username }}"
     password: "{{ satellite_admin_password }}"
     server_url: "{{ satellite_url}}"
@@ -59,11 +59,12 @@
   loop:
     - fast-datapath-for-rhel-8-x86_64-rpms
     - ansible-2-for-rhel-8-x86_64-rpms
+    - ansible-automation-platform-2.1-for-rhel-8-x86_64-rpms
     - "satellite-tools-{{ satellite_tools_version }}-for-rhel-8-x86_64-rpms"
   register: rhel8_additional
 
 - name: "Sync RHEL 8 repositories"
-  theforeman.foreman.repository_sync:
+  redhat.satellite.repository_sync:
     username: "{{ satellite_admin_username }}"
     password: "{{ satellite_admin_password }}"
     server_url: "{{ satellite_url}}"
@@ -74,11 +75,12 @@
     - "Red Hat Ansible Engine"
     - "Red Hat Enterprise Linux Fast Datapath"
     - "Red Hat Enterprise Linux for x86_64"
+    - "Red Hat Ansible Automation Platform 2.1 for RHEL 8 x86_64 RPMs"
   when: (rhel8_repos.changed or rhel8_kickstart.changed or rhel8_additional.changed)
 
 # must set all_repositories to no, and specify exact repo. other we enable all rhel 7 repos (7.0 - 7.n)
 - name: Enable RHEL 7 Server repo
-  theforeman.foreman.repository_set:
+  redhat.satellite.repository_set:
     username: "{{ satellite_admin_username }}"
     password: "{{ satellite_admin_password }}"
     server_url: "{{ satellite_url}}"
@@ -94,7 +96,7 @@
 
 # only works with all_repositories set to yes (there are just those listed)
 - name: Enable additional RHEL 7 repos
-  theforeman.foreman.repository_set:
+  redhat.satellite.repository_set:
     username: "{{ satellite_admin_username }}"
     password: "{{ satellite_admin_password }}"
     server_url: "{{ satellite_url}}"
@@ -109,7 +111,7 @@
   register: rhel7_additional_repos
 
 - name: "Sync RHEL 7 repositories"
-  theforeman.foreman.repository_sync:
+  redhat.satellite.repository_sync:
     username: "{{ satellite_admin_username }}"
     password: "{{ satellite_admin_password }}"
     server_url: "{{ satellite_url}}"

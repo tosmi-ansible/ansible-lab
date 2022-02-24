@@ -14,6 +14,11 @@
   notify:
     - Restart NetworkManager
 
+- name: Add automation controller service ip address with nmcli
+  command: /bin/nmcli con modify 'System eth0' +ipv4.addresses "10.0.0.225/24"
+  notify:
+    - Restart NetworkManager
+
 - name: Allow incoming HTTP connections
   ansible.posix.firewalld:
     service: http
@@ -24,6 +29,42 @@
 - name: Allow incoming HTTPS connections
   ansible.posix.firewalld:
     service: https
+    permanent: yes
+    immediate: yes
+    state: enabled
+
+
+- name: Allow incoming HTTPS connections
+  ansible.posix.firewalld:
+    service: https
+    permanent: yes
+    immediate: yes
+    state: enabled
+
+- name: Allow incoming PostgreSQL connections
+  ansible.posix.firewalld:
+    port: 5432/tcp
+    permanent: yes
+    immediate: yes
+    state: enabled
+
+- name: Allow incoming HAproxy stats connections
+  ansible.posix.firewalld:
+    port: 9000/tcp
+    permanent: yes
+    immediate: yes
+    state: enabled
+
+- name: Allow incoming OpenShift API connections
+  ansible.posix.firewalld:
+    port: 6443/tcp
+    permanent: yes
+    immediate: yes
+    state: enabled
+
+- name: Allow incoming OpenShift machine config server connections
+  ansible.posix.firewalld:
+    port: 22623/tcp
     permanent: yes
     immediate: yes
     state: enabled

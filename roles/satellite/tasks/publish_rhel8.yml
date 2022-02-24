@@ -1,5 +1,5 @@
 - name: "Publish new version of the RHEL 8 kickstart content view"
-  theforeman.foreman.content_view_version:
+  redhat.satellite.content_view_version:
     username: "{{ satellite_admin_username }}"
     password: "{{ satellite_admin_password }}"
     server_url: "{{ satellite_url}}"
@@ -14,7 +14,7 @@
   block:
 
   - name: "Publish new version of the RHEL 8 content view"
-    theforeman.foreman.content_view_version:
+    redhat.satellite.content_view_version:
       username: "{{ satellite_admin_username }}"
       password: "{{ satellite_admin_password }}"
       server_url: "{{ satellite_url}}"
@@ -25,7 +25,7 @@
         - Library
 
   - name: "Publish new version of the RHEL 8 Satellite Tools content view"
-    theforeman.foreman.content_view_version:
+    redhat.satellite.content_view_version:
       username: "{{ satellite_admin_username }}"
       password: "{{ satellite_admin_password }}"
       server_url: "{{ satellite_url}}"
@@ -36,7 +36,7 @@
         - Library
 
   - name: "Publish new version of the RHEL 8 Fast Datapath content view"
-    theforeman.foreman.content_view_version:
+    redhat.satellite.content_view_version:
       username: "{{ satellite_admin_username }}"
       password: "{{ satellite_admin_password }}"
       server_url: "{{ satellite_url}}"
@@ -47,7 +47,7 @@
         - Library
 
   - name: "Publish new version of the RHEL 8 Ansible content view"
-    theforeman.foreman.content_view_version:
+    redhat.satellite.content_view_version:
       username: "{{ satellite_admin_username }}"
       password: "{{ satellite_admin_password }}"
       server_url: "{{ satellite_url}}"
@@ -58,7 +58,7 @@
         - Library
 
   - name: "Publish new version of the RHEL 8 composite content view"
-    theforeman.foreman.content_view_version:
+    redhat.satellite.content_view_version:
       username: "{{ satellite_admin_username }}"
       password: "{{ satellite_admin_password }}"
       server_url: "{{ satellite_url}}"

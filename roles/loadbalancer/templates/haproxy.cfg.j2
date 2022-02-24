@@ -59,13 +59,21 @@ defaults
 
 #---------------------------------------------------------------------
 
+#---------------------------------------------------------------------
+# provide statistics on port 9000
+#---------------------------------------------------------------------
+
 listen stats
     bind :9000
     mode http
     stats enable
     stats uri /
     monitor-uri /healthz
+#---------------------------------------------------------------------
 
+#---------------------------------------------------------------------
+# a postgres instance running in openshift
+#---------------------------------------------------------------------
 listen postgresql
     option tcplog
     bind *:5432
@@ -74,7 +82,11 @@ listen postgresql
     server worker02-pgsql worker02.lan.stderr.at:32101 check port 32101
     server worker03-pgsql worker03.lan.stderr.at:32101 check port 32101
     server worker04-pgsql worker04.lan.stderr.at:32101 check port 32101
+#---------------------------------------------------------------------
 
+#---------------------------------------------------------------------
+# Ansible Tower 3.8 configuration
+#---------------------------------------------------------------------
 frontend tower-http
     bind 10.0.0.212:80
     default_backend tower-http
@@ -95,4 +107,88 @@ backend tower-https
     server tower01-https tower01.lan.stderr.at:443 check
     server tower02-https tower02.lan.stderr.at:443 check
 
+#---------------------------------------------------------------------
+# Ansible Automation Platform 2.x
+#---------------------------------------------------------------------
+frontend automationcontroller-http
+    bind 10.0.0.225:80
+    default_backend automationcontroller-http
+    option tcplog
+
+backend automationcontroller-http
+    balance source
+    server automationcontroller01-http automationcontroller01.lan.stderr.at:80 check
+    server automationcontroller02-http automationcontroller02.lan.stderr.at:80 check
+
+frontend automationcontroller-https
+    bind 10.0.0.225:443
+    default_backend automationcontroller-https
+    option tcplog
+
+backend automationcontroller-https
+    balance source
+    server automationcontroller01-https automationcontroller01.lan.stderr.at:443 check
+    server automationcontroller02-https automationcontroller02.lan.stderr.at:443 check
+#---------------------------------------------------------------------
+
+#---------------------------------------------------------------------
+# OpenShift 4 Cluster
+#---------------------------------------------------------------------
+frontend openshift-api-server
+    bind 10.0.0.230:6443
+    default_backend openshift-api-server
+    option tcplog
+
+backend openshift-api-server
+    balance source
+    server bootstrap 10.0.0.181:6443 check
+    server master01 10.0.0.182:6443 check
+    server master02 10.0.0.183:6443 check
+    server master03 10.0.0.184:6443 check
+
+frontend machine-config-server
+    bind 10.0.0.230:22623
+    default_backend machine-config-server
+    option tcplog
+
+backend machine-config-server
+    balance source
+    server bootstrap 10.0.0.181:22623 check
+    server master01 10.0.0.182:22623 check
+    server master02 10.0.0.183:22623 check
+    server master03 10.0.0.184:22623 check
+
+frontend ingress-http
+    bind 10.0.0.230:80
+    default_backend ingress-http
+    option tcplog
+
+backend ingress-http
+    balance source
+    server infra01-http-router0 10.0.0.185:80 check
+    server infra02-http-router1 10.0.0.186:80 check
+    server worker01-http-router2 10.0.0.188:80 check
+    server worker02-http-router3 10.0.0.189:80 check
+    server worker03-http-router4 10.0.0.193:80 check
+    server worker04-http-router5 10.0.0.194:80 check
+    server stor01-http-router6 10.0.0.190:80 check
+    server stor02-http-router7 10.0.0.191:80 check
+    server stor03-http-router8 10.0.0.192:80 check
+
+frontend ingress-https
+    bind 10.0.0.230:443
+    default_backend ingress-https
+    option tcplog
+
+backend ingress-https
+    balance source
+    server infra01-https-router0 10.0.0.185:443 check
+    server infra02-https-router1 10.0.0.186:443 check
+    server worker01-https-router2 10.0.0.188:443 check
+    server worker02-https-router3 10.0.0.189:443 check
+    server worker03-https-router4 10.0.0.193:443 check
+    server worker04-https-router5 10.0.0.194:443 check
+    server stor01-https-router6 10.0.0.190:443 check
+    server stor02-https-router7 10.0.0.191:443 check
+    server stor03-https-router8 10.0.0.192:443 check
 #---------------------------------------------------------------------
