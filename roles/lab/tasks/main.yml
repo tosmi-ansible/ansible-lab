@@ -11,6 +11,11 @@
     with_items: "{{ lab.hosts }}"
     when: lab.hosts is defined
 
+  - name: Deploy CA certificate
+    include_tasks: ca.yml
+    with_items: "{{ lab.hosts }}"
+    when: lab.hosts is defined
+
   when: not lab_destroy|bool
 
 - name: Removing lab environment {{ lab.name }}
