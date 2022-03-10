@@ -1,9 +1,12 @@
-- name: create fedora host
+- name: create fedora based gitlab-runner
   gather_facts: no
   become: yes
   hosts:
-    - fractal.lan.stderr.at
+    - box01.lan.stderr.at
   vars:
+    rhn:
+      host: https://satellite.lan.stderr.at
+      org_id: 1
     lab:
       ssh_public_key: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIYhjnWzsArZVyyTa1E6sDbH06rUGDAhAF3bf3pmeBtm toni@stderr.at"
       name: linux
@@ -11,13 +14,94 @@
         type: bridge
         name: bridge0
       hosts:
-        - name: fedora
+        - name: runner01
           network: bridge0
-          macaddr: "52:54:00:01:50:78"
-          ipaddr: "10.0.0.178"
-          disksize: 30G
+          macaddr: "52:54:00:01:52:52"
+          ipaddr: "10.0.0.252"
+          disksize: 50G
           memory: 8192
+          register: yes
+          activationkey: "RHEL8"
           cpu: 2
-          image: blank
+          image: rhel-8.5-x86_64-kvm.qcow2
   roles:
     - lab
+
+- name: Install docker-ce
+  gather_facts: no
+  hosts: runner01.lan.stderr.at
+  tasks:
+    - name: Enable docker-ce repo
+      yum_repository:
+        name: docker-ce-stable
+        description: Docker CE Stable - $basearch
+        baseurl: https://download.docker.com/linux/centos/$releasever/$basearch/stable
+        gpgkey: https://download.docker.com/linux/centos/gpg
+        gpgcheck: true
+
+
+    - name: Install the gitlab-runner repository
+      yum_repository:
+        name: gitlab-runner
+        description: gitlab-runner
+        baseurl: https://packages.gitlab.com/runner/gitlab-runner/el/8/$basearch
+        gpgkey:
+          - https://packages.gitlab.com/runner/gitlab-runner/gpgkey
+          - https://packages.gitlab.com/runner/gitlab-runner/gpgkey/runner-gitlab-runner-4C80FB51394521E9.pub.gpg
+        gpgcheck: true
+
+    - name: Install required packages
+      yum:
+        name:
+          - docker-ce
+          - gitlab-runner
+          - python3-pip
+        state: present
+
+    - name: Install required python packages
+      pip:
+        name: docker==5.0.3
+
+    - name: Enable docker service
+      service:
+        name: docker
+        enabled: true
+        state: started
+
+    - name: Create the gitlab-runner-config volume
+      community.docker.docker_volume:
+        name: gitlab-runner-config
+
+    - name: Enable the gitlab-runner container
+      community.docker.docker_container:
+        name: gitlab-runner
+        image: gitlab/gitlab-runner:latest
+        restart: true
+        restart_policy: always
+        state: started
+        volumes:
+          - /var/run/docker.sock:/var/run/docker.sock
+          - gitlab-runner-config:/etc/gitlab-runner
+          - /etc/pki/ca-trust/source/anchors/ca.crt:/etc/gitlab-runner/certs/ca.crt:ro
+
+    - name: Register the runner
+      community.docker.docker_container:
+        name: gitlab-runner
+        image: gitlab/gitlab-runner:latest
+        volumes:
+          - gitlab-runner-config:/etc/gitlab-runner
+          - /etc/pki/ca-trust/source/anchors/ca.crt:/etc/gitlab-runner/certs/ca.crt:ro
+        command:
+          - register
+          - --non-interactive
+          - --executor "docker"
+          - --docker-image registry.access.redhat.com/ubi8/ubi
+          - --url "{{ gitlab_url }}"
+          - --registration-token "{{ gitlab_runner_registration_token }}"
+          - --description "docker-runner"
+          - --maintenance-note "Free-form maintainer notes about this runner"
+          - --tag-list "docker"
+          - --locked="false"
+          - --access-level="not_protected"
+          - --run-untagged="true"
+        command_handling: correct
