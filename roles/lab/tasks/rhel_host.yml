@@ -98,4 +98,5 @@
 
 
 # - include_tasks: inventory.yml
-- include_tasks: register.yml
+- name: Register host on satellite
+  include_tasks: register.yml
