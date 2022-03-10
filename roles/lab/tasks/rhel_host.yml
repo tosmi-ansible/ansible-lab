@@ -37,7 +37,7 @@
       force: no
 
   - name: resize the destination image file
-    command: virt-resize --expand /dev/sda1 "/var/lib/libvirt/images/{{ item.name }}-vda.qcow2.temp" "/var/lib/libvirt/images/{{ item.name }}-vda.qcow2"
+    command: virt-resize --expand /dev/sda3 "/var/lib/libvirt/images/{{ item.name }}-vda.qcow2.temp" "/var/lib/libvirt/images/{{ item.name }}-vda.qcow2"
 
   - name: remove the temporary disk image
     file:
