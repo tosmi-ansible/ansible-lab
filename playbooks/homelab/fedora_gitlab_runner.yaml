@@ -90,8 +90,8 @@
           - "--non-interactive"
           - "--executor=docker"
           - "--docker-privileged"
-          - "--docker-volumes='/certs/client'"
-          - "--docker-image='docker:20.10.13'"
+          - "--docker-volumes=/certs/client"
+          - "--docker-image=docker:20.10.13"
           - "--url={{ gitlab_url }}"
           - "--registration-token={{ gitlab_runner_registration_token }}"
           - "--description=docker-runner-dind"
@@ -103,29 +103,29 @@
         command_handling: correct
       when: gitlab_runner_volume_dind.changed
 
-    # - name: Register socket binding docker runner
-    #   community.docker.docker_container:
-    #     name: gitlab-runner-socket
-    #     image: gitlab/gitlab-runner:latest
-    #     volumes:
-    #       - gitlab-runner-config-socket:/etc/gitlab-runner
-    #       - /etc/pki/ca-trust/source/anchors/ca.crt:/etc/gitlab-runner/certs/ca.crt:ro
-    #     command:
-    #       - "register"
-    #       - "--non-interactive"
-    #       - "--executor=docker"
-    #       - "--docker-volumes=/var/run/docker.sock:/var/run/docker.sock"
-    #       - "--docker-image=docker:20.10.13"
-    #       - "--url={{ gitlab_url }}"
-    #       - "--registration-token={{ gitlab_runner_registration_token }}"
-    #       - "--description=docker-runner-socket"
-    #       - "--maintenance-note='Free-form maintainer notes about this runner'"
-    #       - "--tag-list=docker-socket"
-    #       - "--locked=false"
-    #       - "--access-level=not_protected"
-    #       - "--run-untagged=false"
-    #     command_handling: correct
-    #   when: gitlab_runner_volume_socket.changed
+    - name: Register socket binding docker runner
+      community.docker.docker_container:
+        name: gitlab-runner-socket-register
+        image: gitlab/gitlab-runner:latest
+        volumes:
+          - gitlab-runner-config-socket:/etc/gitlab-runner
+          - /etc/pki/ca-trust/source/anchors/ca.crt:/etc/gitlab-runner/certs/ca.crt:ro
+        command:
+          - "register"
+          - "--non-interactive"
+          - "--executor=docker"
+          - "--docker-volumes=/var/run/docker.sock:/var/run/docker.sock"
+          - "--docker-image=docker:20.10.13"
+          - "--url={{ gitlab_url }}"
+          - "--registration-token={{ gitlab_runner_registration_token }}"
+          - "--description=docker-runner-socket"
+          - "--maintenance-note='Free-form maintainer notes about this runner'"
+          - "--tag-list=docker-socket"
+          - "--locked=false"
+          - "--access-level=not_protected"
+          - "--run-untagged=false"
+        command_handling: correct
+      when: gitlab_runner_volume_socket.changed
 
     - name: Give the runner time to register
       pause:
@@ -143,13 +143,13 @@
           - gitlab-runner-config-dind:/etc/gitlab-runner
           - /etc/pki/ca-trust/source/anchors/ca.crt:/etc/gitlab-runner/certs/ca.crt:ro
 
-    # - name: Enable the gitlab-runner-socket container
-    #   community.docker.docker_container:
-    #     name: gitlab-runner-socket
-    #     image: gitlab/gitlab-runner:latest
-    #     restart: true
-    #     restart_policy: always
-    #     state: started
-    #     volumes:
-    #       - gitlab-runner-config-socket:/etc/gitlab-runner
-    #       - /etc/pki/ca-trust/source/anchors/ca.crt:/etc/gitlab-runner/certs/ca.crt:ro
+    - name: Enable the gitlab-runner-socket container
+      community.docker.docker_container:
+        name: gitlab-runner-socket
+        image: gitlab/gitlab-runner:latest
+        restart: true
+        restart_policy: always
+        state: started
+        volumes:
+          - gitlab-runner-config-socket:/etc/gitlab-runner
+          - /etc/pki/ca-trust/source/anchors/ca.crt:/etc/gitlab-runner/certs/ca.crt:ro
