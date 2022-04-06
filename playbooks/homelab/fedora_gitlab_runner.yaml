@@ -101,7 +101,9 @@
           - "--access-level=not_protected"
           - "--run-untagged=false"
         command_handling: correct
+      register: gitlab_runner_dind_register
       when: gitlab_runner_volume_dind.changed
+
 
     - name: Register socket binding docker runner
       community.docker.docker_container:
@@ -125,11 +127,14 @@
           - "--access-level=not_protected"
           - "--run-untagged=false"
         command_handling: correct
+      register: gitlab_runner_socket_register
       when: gitlab_runner_volume_socket.changed
 
     - name: Give the runner time to register
       pause:
         seconds: 5
+      when:
+        - (gitlab_runner_dind_register.changed or gitlab_runner_socket_register.changed)
 
     - name: Enable the gitlab-runner-dind container
       community.docker.docker_container:
@@ -151,5 +156,6 @@
         restart_policy: always
         state: started
         volumes:
+          - /var/run/docker.sock:/var/run/docker.sock
           - gitlab-runner-config-socket:/etc/gitlab-runner
           - /etc/pki/ca-trust/source/anchors/ca.crt:/etc/gitlab-runner/certs/ca.crt:ro
