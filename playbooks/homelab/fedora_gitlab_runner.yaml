@@ -68,40 +68,94 @@
         enabled: true
         state: started
 
-    - name: Create the gitlab-runner-config volume
+    - name: Create the gitlab-runner-dind volume
       community.docker.docker_volume:
-        name: gitlab-runner-config
+        name: gitlab-runner-config-dind
+      register: gitlab_runner_volume_dind
 
-    - name: Enable the gitlab-runner container
+    - name: Create the gitlab-runner-socket volume
+      community.docker.docker_volume:
+        name: gitlab-runner-config-socket
+      register: gitlab_runner_volume_socket
+
+    - name: Register DinD docker runner
       community.docker.docker_container:
-        name: gitlab-runner
+        name: gitlab-runner-dind-register
+        image: gitlab/gitlab-runner:latest
+        volumes:
+          - gitlab-runner-config-dind:/etc/gitlab-runner
+          - /etc/pki/ca-trust/source/anchors/ca.crt:/etc/gitlab-runner/certs/ca.crt:ro
+        command:
+          - "register"
+          - "--non-interactive"
+          - "--executor=docker"
+          - "--docker-privileged"
+          - "--docker-volumes=/certs/client"
+          - "--docker-image=docker:20.10.13"
+          - "--url={{ gitlab_url }}"
+          - "--registration-token={{ gitlab_runner_registration_token }}"
+          - "--description=docker-runner-dind"
+          - "--maintenance-note='Free-form maintainer notes about this runner'"
+          - "--tag-list=docker-dind"
+          - "--locked=false"
+          - "--access-level=not_protected"
+          - "--run-untagged=false"
+        command_handling: correct
+      register: gitlab_runner_dind_register
+      when: gitlab_runner_volume_dind.changed
+
+
+    - name: Register socket binding docker runner
+      community.docker.docker_container:
+        name: gitlab-runner-socket-register
+        image: gitlab/gitlab-runner:latest
+        volumes:
+          - gitlab-runner-config-socket:/etc/gitlab-runner
+          - /etc/pki/ca-trust/source/anchors/ca.crt:/etc/gitlab-runner/certs/ca.crt:ro
+        command:
+          - "register"
+          - "--non-interactive"
+          - "--executor=docker"
+          - "--docker-volumes=/var/run/docker.sock:/var/run/docker.sock"
+          - "--docker-image=docker:20.10.13"
+          - "--url={{ gitlab_url }}"
+          - "--registration-token={{ gitlab_runner_registration_token }}"
+          - "--description=docker-runner-socket"
+          - "--maintenance-note='Free-form maintainer notes about this runner'"
+          - "--tag-list=docker-socket"
+          - "--locked=false"
+          - "--access-level=not_protected"
+          - "--run-untagged=false"
+        command_handling: correct
+      register: gitlab_runner_socket_register
+      when: gitlab_runner_volume_socket.changed
+
+    - name: Give the runner time to register
+      pause:
+        seconds: 5
+      when:
+        - (gitlab_runner_dind_register.changed or gitlab_runner_socket_register.changed)
+
+    - name: Enable the gitlab-runner-dind container
+      community.docker.docker_container:
+        name: gitlab-runner-dind
         image: gitlab/gitlab-runner:latest
         restart: true
         restart_policy: always
         state: started
         volumes:
           - /var/run/docker.sock:/var/run/docker.sock
-          - gitlab-runner-config:/etc/gitlab-runner
+          - gitlab-runner-config-dind:/etc/gitlab-runner
           - /etc/pki/ca-trust/source/anchors/ca.crt:/etc/gitlab-runner/certs/ca.crt:ro
 
-    - name: Register the runner
+    - name: Enable the gitlab-runner-socket container
       community.docker.docker_container:
-        name: gitlab-runner
+        name: gitlab-runner-socket
         image: gitlab/gitlab-runner:latest
+        restart: true
+        restart_policy: always
+        state: started
         volumes:
-          - gitlab-runner-config:/etc/gitlab-runner
+          - /var/run/docker.sock:/var/run/docker.sock
+          - gitlab-runner-config-socket:/etc/gitlab-runner
           - /etc/pki/ca-trust/source/anchors/ca.crt:/etc/gitlab-runner/certs/ca.crt:ro
-        command:
-          - register
-          - --non-interactive
-          - --executor "docker"
-          - --docker-image registry.access.redhat.com/ubi8/ubi
-          - --url "{{ gitlab_url }}"
-          - --registration-token "{{ gitlab_runner_registration_token }}"
-          - --description "docker-runner"
-          - --maintenance-note "Free-form maintainer notes about this runner"
-          - --tag-list "docker"
-          - --locked="false"
-          - --access-level="not_protected"
-          - --run-untagged="true"
-        command_handling: correct
