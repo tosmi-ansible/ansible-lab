@@ -2,11 +2,13 @@
   file:
     state: directory
     path: "{{ aws_cluster_base_directory }}"
+    mode: "0700"
 
 - name: Create the cluster directory
   file:
     state: directory
     path: "{{ aws_cluster_base_directory }}/{{ aws_cluster_name }}-{{ aws_ocp_cluster_version }}"
+    mode: "0700"
 
 - name: Check if the installer is already there
   stat:
