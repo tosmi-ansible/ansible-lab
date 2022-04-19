@@ -15,7 +15,7 @@
 
 - name: Download and extract the installer
   ansible.builtin.unarchive:
-    src: "https://mirror.openshift.com/pub/openshift-v4/clients/ocp/{{ aws_ocp_cluster_version }}/openshift-install-linux.tar.gz""
+    src: "https://mirror.openshift.com/pub/openshift-v4/clients/ocp/{{ aws_ocp_cluster_version }}/openshift-install-linux.tar.gz"
     dest: "{{ aws_cluster_base_directory }}/{{ aws_cluster_name }}-{{ aws_ocp_cluster_vesion }}"
     remote_src: yes
   when:
