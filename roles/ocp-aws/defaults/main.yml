@@ -10,3 +10,4 @@ aws_ocp_pull_secret: ""
 aws_ocp_worker_type: "m4.large"
 aws_ocp_worker_replicas: 3
 aws_ocp_machine_network: "10.0.0.0/16"
+aws_ocp_cluster_version: stable
