@@ -2,9 +2,6 @@
   hosts:
     - localhost
   gather_facts: no
-#  vars_files:
-#    - ../vault/vault.yaml
   tasks:
-#    - debug: var=encrypted
-#    - debug: var=other
-    - ping:
+    - name: Ping a host
+      ping:
