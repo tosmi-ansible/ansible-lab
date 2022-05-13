@@ -1,4 +1,4 @@
 - name: Destroy cluster {{ aws_cluster_name }}
   command: ./openshift-install destroy cluster --dir=.
   args:
-    chdir: "{{ aws_cluster_base_directory }}/{{ aws_cluster_name }}"
+    chdir: "{{ aws_cluster_base_directory }}/{{ aws_cluster_name }}-{{ aws_ocp_cluster_version }}"

@@ -1,6 +1,6 @@
 - name: Populate ocp_install_state_file
   set_fact:
-    ocp_install_state_file: "{{ aws_cluster_base_directory }}/{{ aws_cluster_name }}/.openshift_install_state.json"
+    ocp_install_state_file: "{{ aws_cluster_base_directory }}/{{ aws_cluster_name }}-{{ aws_ocp_cluster_version }}/.openshift_install_state.json"
 
 - name: Check if openshift_install_state.json exists
   stat:

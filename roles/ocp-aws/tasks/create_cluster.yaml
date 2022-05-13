@@ -2,21 +2,23 @@
   file:
     state: directory
     path: "{{ aws_cluster_base_directory }}"
+    mode: "0700"
 
 - name: Create the cluster directory
   file:
     state: directory
-    path: "{{ aws_cluster_base_directory }}/{{ aws_cluster_name }}"
+    path: "{{ aws_cluster_base_directory }}/{{ aws_cluster_name }}-{{ aws_ocp_cluster_version }}"
+    mode: "0700"
 
 - name: Check if the installer is already there
   stat:
-    path: "{{ aws_cluster_base_directory }}/{{ aws_cluster_name }}/openshift-install"
+    path: "{{ aws_cluster_base_directory }}/{{ aws_cluster_name }}-{{ aws_ocp_cluster_version }}/openshift-install"
   register: aws_ocp_installer
 
 - name: Download and extract the installer
   ansible.builtin.unarchive:
-    src: https://mirror.openshift.com/pub/openshift-v4/clients/ocp/stable/openshift-install-linux.tar.gz
-    dest: "{{ aws_cluster_base_directory }}/{{ aws_cluster_name }}"
+    src: "https://mirror.openshift.com/pub/openshift-v4/clients/ocp/{{ aws_ocp_cluster_version }}/openshift-install-linux.tar.gz"
+    dest: "{{ aws_cluster_base_directory }}/{{ aws_cluster_name }}-{{ aws_ocp_cluster_version }}"
     remote_src: yes
   when:
     - aws_skip_installer_download is not defined
@@ -25,9 +27,9 @@
 - name: Template install-config.yaml
   ansible.builtin.template:
     src: install-config.yaml.j2
-    dest: "{{ aws_cluster_base_directory }}/{{ aws_cluster_name }}/install-config.yaml"
+    dest: "{{ aws_cluster_base_directory }}/{{ aws_cluster_name }}-{{ aws_ocp_cluster_version }}/install-config.yaml"
 
 - name: Creating cluster {{ aws_cluster_name }}
   command: ./openshift-install create cluster --dir=.
   args:
-    chdir: "{{ aws_cluster_base_directory }}/{{ aws_cluster_name }}"
+    chdir: "{{ aws_cluster_base_directory }}/{{ aws_cluster_name }}-{{aws_ocp_cluster_version }}"
