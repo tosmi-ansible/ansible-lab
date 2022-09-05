@@ -1,0 +1,94 @@
+- name: Configure RHEL 9 workstation VM
+  hosts: rhel9
+  gather_facts: no
+  vars:
+    skip_codeready: no
+    stern_version: 1.11.0
+    powerline_version: 1.22.1
+    kustomize_version: 4.5.7
+    k9s_version: 0.26.3
+  tasks:
+    - name: Enable google chrome repo
+      ansible.builtin.yum_repository:
+        name: google-chrome
+        description: google-chrome
+        baseurl: https://dl.google.com/linux/chrome/rpm/stable/x86_64
+        enabled: yes
+        gpgcheck: yes
+        gpgkey: https://dl.google.com/linux/linux_signing_key.pub
+
+    - name: Enable codeready repo for EPEL
+      community.general.rhsm_repository:
+        name: codeready-builder-for-rhel-9-x86_64-rpms
+        state: enabled
+      when: not skip_codeready | bool
+
+    - name: Enable EPEL repository
+      ansible.builtin.dnf:
+        name: https://dl.fedoraproject.org/pub/epel/epel-release-latest-9.noarch.rpm
+        disable_gpg_check: yes
+        state: present
+
+    - name: Install required packages
+      ansible.builtin.yum:
+        name:
+          - google-chrome-stable
+          - gnome-tweaks
+          - xclip
+          - golang
+          - vim-X11
+        state: latest
+
+    - name: Copy vimrc
+      ansible.builtin.copy:
+        src: /home/pinhead/.vimrc
+        dest: /home/tosmi/.vimrc
+        owner: tosmi
+        group: tosmi
+
+    - name: Copy vim directory
+      ansible.builtin.synchronize:
+        src: /home/pinhead/.vim/
+        dest: /home/tosmi/.vim/
+
+    - name: "Install sdkman.sh"
+      shell:
+        cmd: curl -s "https://get.sdkman.io" | bash
+        creates: /home/tosmi/.sdkman
+      become: true
+      become_user: tosmi
+
+    - name: Create bin directory for tosmi
+      ansible.builtin.file:
+        path: /home/tosmi/bin
+        owner: tosmi
+        group: tosmi
+        mode: '0755'
+        state: directory
+
+    - name: Install stern
+      ansible.builtin.get_url:
+        url: "https://github.com/wercker/stern/releases/download/{{ stern_version }}/stern_linux_amd64"
+        dest: /home/tosmi/bin/stern
+        mode: '0755'
+
+    - name: Install powerline-go
+      ansible.builtin.get_url:
+        url: "https://github.com/justjanne/powerline-go/releases/download/v{{ powerline_version }}/powerline-go-linux-amd64"
+        dest: /home/tosmi/bin/powerline-go
+        mode: '0755'
+
+    - name: Download OpenShift client
+      ansible.builtin.get_url:
+        url: https://mirror.openshift.com/pub/openshift-v4/x86_64/clients/ocp/stable/openshift-client-linux.tar.gz
+        dest: /home/tosmi/Downloads/openshift-client-linux.tar.gz
+
+    - name: Download kustomize
+      ansible.builtin.get_url:
+        url: "https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize%2Fv4.5.7/kustomize_v{{ kustomize_version }}_linux_amd64.tar.gz"
+        dest: /home/tosmi/Downloads/kustomize_v{{ kustomize_version }}_linux_amd64.tar.gz
+
+    - name: Download k9s
+      ansible.builtin.get_url:
+        url: "https://github.com/derailed/k9s/releases/download/v{{ k9s_version}}/k9s_Linux_x86_64.tar.gz"
+        dest: /home/tosmi/Downloads/k9s_Linux_x86_64.tar.gz
