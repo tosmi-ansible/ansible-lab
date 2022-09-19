@@ -1,0 +1,11 @@
+apiVersion: operator.openshift.io/v1
+kind: Network
+metadata:
+  name: cluster
+spec:
+  defaultNetwork:
+    ovnKubernetesConfig:
+      hybridOverlayConfig:
+        hybridClusterNetwork:
+        - cidr: "{{ aws_ocp_hybrid_cidr }}"
+          hostPrefix: "{{ aws_ocp_hybrid_host_prefix}}"
