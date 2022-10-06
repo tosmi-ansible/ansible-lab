@@ -7,5 +7,5 @@ spec:
     ovnKubernetesConfig:
       hybridOverlayConfig:
         hybridClusterNetwork:
-        - cidr: "{{ aws_ocp_hybrid_cidr }}"
-          hostPrefix: "{{ aws_ocp_hybrid_host_prefix}}"
+        - cidr: {{ aws_ocp_hybrid_cidr }}
+          hostPrefix: {{ aws_ocp_hybrid_host_prefix}}

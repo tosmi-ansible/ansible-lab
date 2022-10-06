@@ -29,7 +29,18 @@
     src: install-config.yaml.j2
     dest: "{{ aws_cluster_base_directory }}/{{ aws_cluster_name }}-{{ aws_ocp_cluster_version }}/install-config.yaml"
 
-- name: Creating cluster {{ aws_cluster_name }}
-  command: ./openshift-install create cluster --dir=.
+- name: Create installation manifests for {{ aws_cluster_name }}
+  command: ./openshift-install create manifests --dir=.
   args:
     chdir: "{{ aws_cluster_base_directory }}/{{ aws_cluster_name }}-{{aws_ocp_cluster_version }}"
+
+- name: Configure hybrid networkworking if required
+  ansible.builtin.template:
+    src: cluster-network-03-config.yml.j2
+    dest: "{{ aws_cluster_base_directory }}/{{ aws_cluster_name }}-{{ aws_ocp_cluster_version }}/manifests/cluster-network-03-config.yml"
+  when: aws_ocp_hybrid_networking | bool
+
+# - name: Creating cluster {{ aws_cluster_name }}
+#   command: ./openshift-install create cluster --dir=.
+#   args:
+#     chdir: "{{ aws_cluster_base_directory }}/{{ aws_cluster_name }}-{{aws_ocp_cluster_version }}"
