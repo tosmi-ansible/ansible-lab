@@ -34,20 +34,30 @@
     password_hash: SHA256
     state: present
 
-- name: Configure repositories
+- name: Configure repositories for RHEL 8
   include_tasks: repositories.yml
+
+- name: Configure repositories RHEL 9
+  include_tasks: repositories_rhel9.yml
 
 - name: Configure repository sync
   include_tasks: sync.yml
 
-- name: Configure content views
+- name: Configure content views for RHEL 8
   include_tasks: contentviews.yml
+
+- name: Configure content views for RHEL 9
+  include_tasks: contentviews_rhel9.yml
 
 - name: Publish RHEL 8 content views
   include_tasks: publish_rhel8.yml
 
-- name: Configure RHEL 7 content views
-  include_tasks: contentviews_rhel7.yml
+- name: Publish RHEL 9 content views
+  include_tasks: publish_rhel9.yml
+
+# disabled. we have no rhel 7 hosts (2022-10-25)
+#- name: Configure RHEL 7 content views
+#  include_tasks: contentviews_rhel7.yml
 
 # disabled for now (2021-12-01)
 #- name: Configure activation keys

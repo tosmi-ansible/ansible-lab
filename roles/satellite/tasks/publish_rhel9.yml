@@ -1,0 +1,61 @@
+- name: "Publish new version of the RHEL 9 kickstart content view"
+  redhat.satellite.content_view_version:
+    username: "{{ satellite_admin_username }}"
+    password: "{{ satellite_admin_password }}"
+    server_url: "{{ satellite_url}}"
+    validate_certs: false
+    organization: "{{ satellite_organization }}"
+    content_view: "CV: RHEL 9 kickstart"
+    lifecycle_environments:
+      - Library
+  when: cv_rhel9kickstart.changed
+
+- name: Update RHEL 9
+  block:
+
+  - name: "Publish new version of the RHEL 9 content view"
+    redhat.satellite.content_view_version:
+      username: "{{ satellite_admin_username }}"
+      password: "{{ satellite_admin_password }}"
+      server_url: "{{ satellite_url}}"
+      validate_certs: false
+      organization: "{{ satellite_organization }}"
+      content_view: "CV: RHEL 9"
+      lifecycle_environments:
+        - Library
+
+  - name: "Publish new version of the RHEL 9 Fast Datapath content view"
+    redhat.satellite.content_view_version:
+      username: "{{ satellite_admin_username }}"
+      password: "{{ satellite_admin_password }}"
+      server_url: "{{ satellite_url}}"
+      validate_certs: false
+      organization: "{{ satellite_organization }}"
+      content_view: "CV: RHEL 9 Fast Datapath"
+      lifecycle_environments:
+        - Library
+
+  - name: "Publish new version of the RHEL 9 Ansible content view"
+    redhat.satellite.content_view_version:
+      username: "{{ satellite_admin_username }}"
+      password: "{{ satellite_admin_password }}"
+      server_url: "{{ satellite_url}}"
+      validate_certs: false
+      organization: "{{ satellite_organization }}"
+      content_view: "CV: RHEL 9 Ansible"
+      lifecycle_environments:
+        - Library
+
+  - name: "Publish new version of the RHEL 9 composite content view"
+    redhat.satellite.content_view_version:
+      username: "{{ satellite_admin_username }}"
+      password: "{{ satellite_admin_password }}"
+      server_url: "{{ satellite_url}}"
+      validate_certs: false
+      organization: "{{ satellite_organization }}"
+      content_view: "CCV: RHEL 9"
+      lifecycle_environments:
+        - Library
+        - Lab
+
+  when: ccv_rhel9.changed or satellite_rhel9_update

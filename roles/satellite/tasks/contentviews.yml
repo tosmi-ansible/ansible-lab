@@ -83,25 +83,6 @@
         product: 'Red Hat Ansible Automation Platform'
   register: cv_rhel8_ansible
 
-- name: "Create a composite content view for RHEL 8 RHEV"
-  redhat.satellite.content_view:
-    username: "{{ satellite_admin_username }}"
-    password: "{{ satellite_admin_password }}"
-    server_url: "{{ satellite_url}}"
-    validate_certs: false
-    organization: "{{ satellite_organization }}"
-    name: "CCV: RHEL 8 RHEV"
-    composite: true
-    auto_publish: false
-    components:
-      - content_view: "CV: RHEL 8"
-        latest: true
-      - content_view: "CV: RHEL 8 Satellite Tools"
-        latest: true
-      - content_view: "CV: RHEL 8 Ansible"
-        latest: true
-  register: ccv_rhev
-
 - name: "Create a composite content view for RHEL 8"
   redhat.satellite.content_view:
     username: "{{ satellite_admin_username }}"

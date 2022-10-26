@@ -1,4 +1,5 @@
 ---
 # vars file for satellite
-satellite_tools_version: "6.9"
-satellite_rhel8_os_minor_version: "5"
+satellite_tools_version: "6.10"
+satellite_rhel8_os_minor_version: "9"
+satellite_rhel9_os_minor_version: "0"

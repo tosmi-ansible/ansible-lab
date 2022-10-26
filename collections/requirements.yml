@@ -1,6 +1,4 @@
 roles:
-  - name: geerlingguy.gitlab
-    version: 3.1.0
 
 collections:
   - name: ansible.posix
@@ -19,12 +17,8 @@ collections:
     version: 5.5.0
     source: https://galaxy.ansible.com
 
-  - name: ansible.tower
-    version: 3.8.4
-    source: https://console.redhat.com/api/automation-hub/
-
   - name: ansible.controller
-    version: 4.1.1
+    version: 4.2.1
     source: https://console.redhat.com/api/automation-hub/
 
   - name:  amazon.aws
@@ -32,5 +26,5 @@ collections:
     source: https://console.redhat.com/api/automation-hub/
 
   - name:  redhat.satellite
-    version: 3.0.0
+    version: 3.7.0
     source: https://console.redhat.com/api/automation-hub/
