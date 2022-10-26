@@ -73,4 +73,4 @@
     - "Red Hat Enterprise Linux Fast Datapath"
     - "Red Hat Enterprise Linux for x86_64"
     - "Red Hat Ansible Automation Platform 2.2 for RHEL 9 x86_64 RPMs"
-  when: (rhel9_repos.changed or rhel9_kickstart.changed or rhel9_additional.changed or)
+  when: (rhel9_repos.changed or rhel9_kickstart.changed or rhel9_additional.changed)

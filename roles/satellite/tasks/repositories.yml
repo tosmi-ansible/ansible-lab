@@ -59,7 +59,6 @@
   loop:
     - fast-datapath-for-rhel-8-x86_64-rpms
     - ansible-2-for-rhel-8-x86_64-rpms
-    - ansible-automation-platform-2.1-for-rhel-8-x86_64-rpms
     - "satellite-tools-{{ satellite_tools_version }}-for-rhel-8-x86_64-rpms"
   register: rhel8_additional
 
@@ -75,5 +74,4 @@
     - "Red Hat Ansible Engine"
     - "Red Hat Enterprise Linux Fast Datapath"
     - "Red Hat Enterprise Linux for x86_64"
-    - "Red Hat Ansible Automation Platform 2.1 for RHEL 8 x86_64 RPMs"
   when: (rhel8_repos.changed or rhel8_kickstart.changed or rhel8_additional.changed)
