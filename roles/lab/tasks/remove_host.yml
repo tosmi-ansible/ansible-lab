@@ -24,6 +24,3 @@
   file:
     path: /var/lib/libvirt/images/{{ item.name }}-vda.qcow2.temp
     state: absent
-
-- name: Removing {{ item.name }} from inventory
-  local_action: file path="../inventory/{{ item.name }}" state=absent
