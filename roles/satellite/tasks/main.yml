@@ -1,7 +1,7 @@
 ---
 # tasks file for satellite
-# - name: Install satellite
-#   include_tasks: install.yml
+- name: Install satellite
+  include_tasks: install.yml
 
 - name: Copy manifest and upload to satellite
   block:

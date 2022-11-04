@@ -11,12 +11,17 @@
 - name: Enable required repos
   rhsm_repository:
     name:
-      - rhel-7-server-rpms
-      - rhel-7-server-satellite-6.7-rpms
-      - rhel-7-server-satellite-maintenance-6-rpms
-      - rhel-server-rhscl-7-rpms
-      - rhel-7-server-ansible-2.8-rpms
+      - rhel-8-for-x86_64-baseos-rpms
+      - rhel-8-for-x86_64-appstream-rpms
+      - satellite-6.11-for-rhel-8-x86_64-rpms
+      - satellite-maintenance-6.11-for-rhel-8-x86_64-rpms
     state: enabled
+
+- name: Enable satellite module
+  command: dnf module enable -y satellite:el8
+  register: result
+  changed_when:
+    - '"Enabling module streams" in result.stdout'
 
 - name: Install satellite package
   package:
@@ -25,7 +30,6 @@
       - satellite
       - chrony
       - sos
-      - python2-apypie
 
 - name: Enable chrony
   service:
@@ -33,10 +37,36 @@
     state: started
     enabled: yes
 
-- name: Deploy answer file from template
-  template:
-    src: lab-satellite-answers.yaml.j2
-    dest: /etc/foreman-installer/scenarios.d/satellite-answers.yaml
+# - name: Deploy answer file from template
+#   template:
+#     src: lab-satellite-answers.yaml.j2
+#     dest: /etc/foreman-installer/scenarios.d/satellite-answers.yaml
 
-- name: Install satellite software
-  command: satellite-installer --scenario satellite
+- name: Store satellte TLS key in tmp dir
+  copy:
+    dest: /tmp/satellite.key
+    content: "{{ satellite.key }}"
+
+- name: Store satellte TLS cert in tmp dir
+  copy:
+    dest: /tmp/satellite.crt
+    content: "{{ satellite.cert }}"
+
+- name: Store CA TLS cert in tmp dir
+  copy:
+    dest: /tmp/ca.crt
+    content: "{{ satellite.cacert }}"
+
+- name: Check if Satellite was installed
+  stat:
+    path: /etc/foreman-installer/scenarios.d/.installed
+  register: satellite_installed
+
+- name: Fail if satellite needs to be installed
+  fail:
+    msg: "Please install satellite via satellite-installer now"
+  when: not satellite_installed.stat.exists
+
+
+# - name: Install satellite software
+#   command: satellite-installer --scenario satellite
