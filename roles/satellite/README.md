@@ -1,12 +1,38 @@
 Role Name
 =========
 
-A brief description of the role goes here.
+Prepares a satellite system for installation and configures content views.
+
+Installing Satellite
+---------------------
+
+```
+satellite-installer --scenario satellite \
+--foreman-initial-organization "Lab" \
+--foreman-initial-location "Home" \
+--foreman-initial-admin-username admin \
+--foreman-initial-admin-password redhat \
+--certs-server-cert "/tmp/satellite.crt" \
+--certs-server-key "/tmp/satellite.key" \
+--certs-server-ca-cert "/tmp/ca.crt"
+```
 
 Requirements
 ------------
 
 Any pre-requisites that may not be covered by Ansible itself or the role should be mentioned here. For instance, if the role uses the EC2 module, it may be a good idea to mention in this section that the boto package is required.
+
+satellite:
+  fqdn: sat.lan.stderr.at
+  domain: lan.stderr.at
+  org_id: 13048846
+  activation_key: Satellite
+  key: !vault |
+	<the key>
+  cert: |
+	<the cert>
+  cacert: |
+	<the CA cert>
 
 Role Variables
 --------------
