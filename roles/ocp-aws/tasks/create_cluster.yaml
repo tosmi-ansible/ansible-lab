@@ -33,6 +33,7 @@
   command: ./openshift-install create manifests --dir=.
   args:
     chdir: "{{ aws_cluster_base_directory }}/{{ aws_cluster_name }}-{{aws_ocp_cluster_version }}"
+  when: aws_create_manifests | bool
 
 - name: Configure hybrid networkworking if required
   ansible.builtin.template:
