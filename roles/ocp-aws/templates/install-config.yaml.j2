@@ -7,15 +7,15 @@ compute:
   platform:
     aws:
       type: {{ aws_ocp_worker_type }}
-  replicas: {{ aws_ocp_worker_replicas }}
+  replicas: {{ aws_ocp_worker_replicas | default('3') }}
 controlPlane:
   architecture: amd64
   hyperthreading: Enabled
   name: master
   platform:
     aws:
-      type: m4.xlarge
-  replicas: 3
+      type: {{ aws_ocp_master_type | default('m5.xlarge') }}
+  replicas: {{ aws_ocp_master_replicas | default('3') }}
 metadata:
   creationTimestamp: null
   name: {{ aws_cluster_name }}
