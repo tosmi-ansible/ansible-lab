@@ -1,0 +1,21 @@
+---
+- name: Add tailscale yum repository
+  ansible.builtin.yum_repository:
+    name: tailscale-stable
+    file: tailscale
+    description: Tailscale YUM repository for RHEL 9
+    baseurl: https://pkgs.tailscale.com/stable/rhel/$releasever/$basearch
+    gpgkey: https://pkgs.tailscale.com/stable/rhel/$releasever/repo.gpg
+    gpgcheck: true
+    enabled: true
+
+- name: Install the tailscale client
+  ansible.builtin.dnf:
+    name: tailscale
+    state: latest
+
+- name: Enable the tailscaled service
+  ansible.builtin.systemd_service:
+    name: tailscaled
+    enabled: true
+    state: started
