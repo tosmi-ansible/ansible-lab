@@ -1,0 +1,14 @@
+---
+- name: Create a RHEL 9 KubeVirt VM
+  gather_facts: no
+  become: no
+  hosts:
+    - localhost
+  tasks:
+    - name: Create a VM
+      kubevirt.core.kubevirt_vm:
+        state: present
+        name: rhel9
+        namespace: testvm
+        labels:
+          app: rhel9
