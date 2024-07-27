@@ -17,7 +17,16 @@
       in
       {
         devShells.default = pkgs.mkShell {
-          packages = [ pkgs.ansible pkgs.ansible-lint pkgs.ansible-navigator pkgs.ansible-builder pkgs.glibcLocales pkgs.ansible-language-server ];
+          packages = [
+            pkgs.ansible
+            pkgs.ansible-lint
+            pkgs.ansible-navigator
+            pkgs.ansible-builder
+            pkgs.glibcLocales
+            pkgs.yamllint
+            pkgs.kubevirt
+            pkgs.python312Packages.kubernetes
+          ];
         };
       });
 }
