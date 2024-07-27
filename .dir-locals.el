@@ -1,6 +1,4 @@
-;; ((nil
-;;   . ((eglot-workspace-configuration
-;;       . (:yaml (:schemas (:kubernetes "/deployment.yaml")
-;; 			 )))
-;;      (eval . (when (string-match "\\.yaml|\\.yml" (buffer-file-name))
-;; 	       (ansible))))))
+((nil
+  . ((eglot-workspace-configuration
+      . (:ansible (:validation
+		   (:enabled t :lint (:enabled t))))))))
