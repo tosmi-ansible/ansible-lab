@@ -7,9 +7,19 @@ images:
 options:
   package_manager_path: /usr/bin/microdnf
 
+additional_build_files:
+  - src: files/ansible.cfg
+    dest: configs
+
 additional_build_steps:
+  prepend_final:
+    - ARG K8S_AUTH_API_KEY
+    - ARG K8S_AUTH_HOST
+    - ADD _build/configs/ansible.cfg /runner/.ansible.cfg
+
   prepend_galaxy:
     - ARG ANSIBLE_GALAXY_SERVER_AUTOMATION_HUB_TOKEN
+
     - ENV ANSIBLE_GALAXY_SERVER_LIST=automation_hub,release_galaxy
     - ENV ANSIBLE_GALAXY_SERVER_AUTOMATION_HUB_URL=https://console.redhat.com/api/automation-hub/
     - ENV ANSIBLE_GALAXY_SERVER_AUTOMATION_HUB_AUTH_URL=https://sso.redhat.com/auth/realms/redhat-external/protocol/openid-connect/token
