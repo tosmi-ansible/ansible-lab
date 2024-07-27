@@ -1,0 +1,6 @@
+plugin: redhat.openshift_virtualization.kubevirt
+validate_certs: false
+namespaces:
+  - aap
+network_name: bridge-network
+host_format: "{name}.lan.stderr.at"
