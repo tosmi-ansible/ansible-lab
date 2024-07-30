@@ -10,12 +10,17 @@ options:
 additional_build_files:
   - src: files/ansible.cfg
     dest: configs
+  - src: files/tntinfra-ca.crt
+    dest: configs
 
 additional_build_steps:
   prepend_final:
     - ARG K8S_AUTH_API_KEY
     - ARG K8S_AUTH_HOST
+    - ARG ANSIBLE_VAULT_PASSWORD
     - ADD _build/configs/ansible.cfg /runner/.ansible.cfg
+    - ADD _build/configs/tntinfra-ca.crt /etc/pki/ca-trust/source/anchors/
+    - RUN update-ca-trust
 
   prepend_galaxy:
     - ARG ANSIBLE_GALAXY_SERVER_AUTOMATION_HUB_TOKEN
