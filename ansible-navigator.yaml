@@ -6,9 +6,9 @@ ansible-navigator:
     config:
       path: ./ansible.cfg
     cmdline: "--ask-vault-pass"
-    inventory:
-      entries:
-        - ../aap-setup-inventory
+    # inventory:
+    #   entries:
+    #     - ../aap-setup-inventory
 
   execution-environment:
     image: quay.io/tosmi-ansible/ee-lab:latest

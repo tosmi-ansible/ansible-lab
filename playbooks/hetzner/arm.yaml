@@ -1,0 +1,18 @@
+---
+- name: Configure Hetzner ARM system
+  hosts:
+    - arm.stderr.at
+  gather_facts: false
+  tasks:
+    - name: Install required packages
+      ansible.builtin.dnf:
+        state: latest
+        name:
+          - tailscale
+          - caddy
+
+    - name: Enable tailscaled service
+      ansible.builtin.systemd_service:
+        state: started
+        name: tailscaled
+        enabled: true
