@@ -1,0 +1,81 @@
+---
+# - name: Create a VM as the current user for running AAP
+#   gather_facts: false
+#   become: false
+#   hosts:
+#     - localhost
+#   vars:
+#     lab:
+#       ssh_public_key: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIYhjnWzsArZVyyTa1E6sDbH06rUGDAhAF3bf3pmeBtm toni@stderr.at"
+#       name: aap
+#       network:
+#         name: default
+#         type: bridge
+#       hosts:
+#         - name: aap-local
+#           macaddr: 52:54:00:6c:3c:01
+#           ipaddr: 192.168.122.3
+#           libvirt_session: session
+#           disk:
+#             size_gb: 50
+#             root_fs: /dev/sda4
+#           memory: 8192
+#           cpu: 2
+#           image: rhel-9.4-x86_64-kvm.qcow2
+
+#   roles:
+#     - { role: tosmi.lab_utilities.create_vm }
+
+# - name: Red Hat registration
+#   gather_facts: false
+#   become: true
+#   remote_user: admin
+#   hosts:
+#     - aap-local
+#   tasks:
+#     - name: Run subscription-manager registery
+#       community.general.redhat_subscription:
+#         state: present
+#         org_id: 13048846
+#         activationkey: Playground
+
+#     - name: Register the insights client
+#       redhat.insights.insights_register:
+#         state: present
+#       become: true
+
+#     - name: Set a FQDN hostname (required for AAP)
+#       ansible.builtin.hostname:
+#         name: "aap.192.168.122.3.nip.io"
+#         use: systemd
+
+#     - name: Install packages (required for AAP)
+#       ansible.builtin.dnf:
+#         state: present
+#         name:
+#           - ansible-core
+#           - wget
+#           - git
+#           - rsync
+
+- name: Prepare AAP installation
+  gather_facts: false
+  remote_user: admin
+  become: true
+  hosts:
+    - aap-local
+
+  pre_tasks:
+    - name: Copy custom CA certificates to controller
+      ansible.builtin.copy:
+        content: "{{ controller_custom_ca_certificates }}"
+        dest: /etc/pki/ca-trust/source/anchors/tntinfra-ca.crt
+      register: controller_copy_ca_trust
+    - name: Update system CA trust store
+      command: update-ca-trust
+      when: controller_copy_ca_trust.changed
+
+  roles:
+    - { role: infra.aap_utilities.aap_setup_download }
+    - { role: infra.aap_utilities.aap_setup_prepare }
+    - { role: infra.aap_utilities.aap_setup_install }

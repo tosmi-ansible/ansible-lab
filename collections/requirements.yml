@@ -1,6 +1,12 @@
 roles:
 
 collections:
+
+  # local collections for testing
+  - source: ../tosmi
+    type: subdirs
+
+  # general collections
   - name: kubernetes.core
     version: 5.0.0
     source: https://console.redhat.com/api/automation-hub/
