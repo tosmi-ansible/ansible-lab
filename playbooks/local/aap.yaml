@@ -38,7 +38,7 @@
     - name: Run subscription-manager registery
       community.general.redhat_subscription:
         state: present
-        org_id: 13048846
+        org_id: "13048846"
         activationkey: Playground
 
     - name: Register the insights client
@@ -75,7 +75,7 @@
         dest: /etc/pki/ca-trust/source/anchors/tntinfra-ca.crt
       register: controller_copy_ca_trust
     - name: Update system CA trust store
-      command: update-ca-trust
+      ansible.builtin.command: update-ca-trust
       when: controller_copy_ca_trust.changed
 
   roles:
