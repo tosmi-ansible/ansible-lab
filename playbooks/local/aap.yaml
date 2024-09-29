@@ -27,11 +27,11 @@
   roles:
     - { role: tosmi.lab_utilities.create_vm }
 
-- name: Red Hat registration
+- name: Execute pre-installation tasks
   gather_facts: false
   become: true
   tags: register
-  remote_user: admin
+  remote_user: root
   hosts:
     - aap-local
   tasks:
@@ -60,6 +60,38 @@
           - git
           - rsync
 
+    - name: Create admin user
+      ansible.builtin.user:
+        name: admin
+        groups:
+          - wheel
+
+    - name: Create admin ssh directory
+      ansible.builtin.file:
+        path: /home/admin/.ssh
+        mode: "0700"
+        state: directory
+        owner: admin
+        group: admin
+
+    - name: Copy authorized_keys file from root
+      ansible.builtin.copy:
+        dest: /home/admin/.ssh/authorized_keys
+        src: /root/.ssh/authorized_keys
+        remote_src: yes
+        mode: "0600"
+        owner: admin
+        group: admin
+
+    - name: Allow the admin user to run any commands as root
+      community.general.sudoers:
+        name: admin-do-as-root
+        state: present
+        user: admin
+        runas: root
+        commands: ALL
+        nopassword: yes
+
 - name: Prepare AAP installation
   gather_facts: false
   remote_user: admin
@@ -67,18 +99,7 @@
   become: true
   hosts:
     - aap-local
-
-  pre_tasks:
-    - name: Copy custom CA certificates to controller
-      ansible.builtin.copy:
-        content: "{{ controller_custom_ca_certificates }}"
-        dest: /etc/pki/ca-trust/source/anchors/tntinfra-ca.crt
-      register: controller_copy_ca_trust
-    - name: Update system CA trust store
-      ansible.builtin.command: update-ca-trust
-      when: controller_copy_ca_trust.changed
-
   roles:
     - { role: infra.aap_utilities.aap_setup_download }
     - { role: infra.aap_utilities.aap_setup_prepare }
-    - { role: infra.aap_utilities.aap_setup_install }
+    # - { role: infra.aap_utilities.aap_setup_install }
