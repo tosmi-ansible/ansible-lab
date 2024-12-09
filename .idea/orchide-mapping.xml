@@ -75,7 +75,6 @@
         <option value="$PROJECT_DIR$/../lab-inventory" />
       </list>
     </option>
-    <option name="orchideLocationsChanged" value="true" />
     <option name="orchidePlaybookLocations">
       <list>
         <option value="$PROJECT_DIR$/playbooks" />
@@ -84,9 +83,6 @@
     <option name="orchideRoleLocations">
       <list>
         <option value="$PROJECT_DIR$/roles" />
-        <option value="$PROJECT_DIR$/playbooks/aws/roles" />
-        <option value="$PROJECT_DIR$/playbooks/roles" />
-        <option value="$PROJECT_DIR$/playbooks/homelab/roles" />
       </list>
     </option>
     <option name="playbookPatternForOtherAnsibleTypes">
