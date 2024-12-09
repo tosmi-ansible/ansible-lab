@@ -1,9 +1,0 @@
-- name: A simple test playbook
-  hosts:
-    - all
-  gather_facts: no
-  vars_files:
-    - ../vault/vault.yaml
-  tasks:
-    - ping:
-    - debug: var=encrypted

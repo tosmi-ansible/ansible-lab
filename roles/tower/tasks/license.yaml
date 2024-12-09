@@ -1,2 +1,0 @@
-- name: Upload Ansible Tower manifest
-  awx.awx.tower_license:
