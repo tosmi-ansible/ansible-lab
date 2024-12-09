@@ -1,21 +1,21 @@
 apiVersion: v1
-baseDomain: {{ aws_base_domain }}
+baseDomain: {{ aws_ocp[aws_cluster_name].base_domain }}
 compute:
 - architecture: amd64
   hyperthreading: Enabled
   name: worker
   platform:
     aws:
-      type: {{ aws_ocp_worker_type }}
-  replicas: {{ aws_ocp_worker_replicas | default('3') }}
+      type: {{ aws_ocp[aws_cluster_name].worker_type }}
+  replicas: {{ aws_ocp[aws_cluster_name].worker_replicas | default('3') }}
 controlPlane:
   architecture: amd64
   hyperthreading: Enabled
   name: master
   platform:
     aws:
-      type: {{ aws_ocp_master_type | default('m5.xlarge') }}
-  replicas: {{ aws_ocp_master_replicas | default('3') }}
+      type: {{ aws_ocp[aws_cluster_name].controller_type | default('m5.xlarge') }}
+  replicas: {{ aws_ocp[aws_cluster_name].controller_replicas | default('3') }}
 metadata:
   creationTimestamp: null
   name: {{ aws_cluster_name }}
@@ -30,7 +30,7 @@ networking:
   - 172.30.0.0/16
 platform:
   aws:
-    region: {{ aws_region }}
+    region: {{ aws_ocp[aws_cluster_name].region }}
     userTags:
       cluster: {{ aws_cluster_name }}
 publish: External

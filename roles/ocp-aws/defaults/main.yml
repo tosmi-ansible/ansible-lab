@@ -1,8 +1,14 @@
 ---
 # defaults file for ocp-aws
-aws_create_cluster: true
+
+aws_ocp: null
+
+aws_ocp_create_cluster: true
+aws_ocp_create_manifests: true
+aws_ocp_run_installer: false
+
 aws_cluster_base_directory: "~/tmp/"
-aws_cluster_name: "ocp"
+aws_cluster_name: "hub"
 aws_base_domain: "aws.local"
 aws_region: eu-central-1
 aws_ssh_key: ""
@@ -17,4 +23,6 @@ aws_ocp_network_type: OVNKubernetes
 aws_ocp_hybrid_networking: false
 aws_ocp_hybrid_cidr: "10.132.0.0/14"
 aws_ocp_hybrid_host_prefix: 23
-aws_create_manifests: true
+aws_ocp_installer_download: true
+
+

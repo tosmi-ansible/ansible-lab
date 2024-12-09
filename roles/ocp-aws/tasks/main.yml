@@ -1,6 +1,12 @@
 ---
-- include_tasks: create_cluster.yaml
-  when: aws_create_cluster|bool
+- name: Define cluster directory variable
+  ansible.builtin.set_fact:
+    __aws_ocp_cluster_directory: "{{ aws_cluster_base_directory }}/{{ aws_ocp[aws_cluster_name].name }}-{{ aws_ocp[aws_cluster_name].version }}"
 
-- include_tasks: destroy_cluster.yaml
-  when: not aws_create_cluster|bool
+- name: Include create cluster tasks
+  ansible.builtin.include_tasks: create_cluster.yaml
+  when: aws_ocp_create_cluster|bool
+
+- name: Include create cluster tasks
+  ansible.builtin.include_tasks: destroy_cluster.yaml
+  when: not aws_ocp_create_cluster|bool

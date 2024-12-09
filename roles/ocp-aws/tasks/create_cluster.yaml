@@ -1,47 +1,57 @@
+---
 - name: Create the cluster base directory
-  file:
+  ansible.builtin.file:
     state: directory
     path: "{{ aws_cluster_base_directory }}"
     mode: "0700"
 
+- name: Print cluster directory
+  ansible.builtin.debug:
+    msg: "Install files: {{ __aws_ocp_cluster_directory }}"
+
 - name: Create the cluster directory
-  file:
+  ansible.builtin.file:
     state: directory
-    path: "{{ aws_cluster_base_directory }}/{{ aws_cluster_name }}-{{ aws_ocp_cluster_version }}"
+    path: "{{ __aws_ocp_cluster_directory }}"
     mode: "0700"
 
 - name: Check if the installer is already there
-  stat:
-    path: "{{ aws_cluster_base_directory }}/{{ aws_cluster_name }}-{{ aws_ocp_cluster_version }}/openshift-install"
-  register: aws_ocp_installer
+  ansible.builtin.stat:
+    path: "{{ __aws_ocp_cluster_directory }}/openshift-install"
+  register: __aws_ocp_installer
 
 - name: Download and extract the installer
   ansible.builtin.unarchive:
-    src: "https://mirror.openshift.com/pub/openshift-v4/clients/ocp/{{ aws_ocp_cluster_version }}/openshift-install-linux.tar.gz"
-    dest: "{{ aws_cluster_base_directory }}/{{ aws_cluster_name }}-{{ aws_ocp_cluster_version }}"
-    remote_src: yes
+    src: "https://mirror.openshift.com/pub/openshift-v4/clients/ocp/{{ aws_ocp[aws_cluster_name].version }}/openshift-install-linux.tar.gz"
+    dest: "{{ __aws_ocp_cluster_directory }}"
+    remote_src: true
   when:
-    - aws_skip_installer_download is not defined
-    - not aws_ocp_installer.stat.exists
+    - aws_ocp_installer_download | bool
+    - not __aws_ocp_installer.stat.exists
 
 - name: Template install-config.yaml
   ansible.builtin.template:
     src: install-config.yaml.j2
-    dest: "{{ aws_cluster_base_directory }}/{{ aws_cluster_name }}-{{ aws_ocp_cluster_version }}/install-config.yaml"
+    dest: "{{ __aws_ocp_cluster_directory }}/install-config.yaml"
+    mode: 0644
 
 - name: Create installation manifests for {{ aws_cluster_name }}
-  command: ./openshift-install create manifests --dir=.
+  ansible.builtin.command: ./openshift-install create manifests --dir=.
   args:
-    chdir: "{{ aws_cluster_base_directory }}/{{ aws_cluster_name }}-{{aws_ocp_cluster_version }}"
-  when: aws_create_manifests | bool
+    chdir: "{{ __aws_ocp_cluster_directory }}"
+  changed_when: true
+  when: aws_ocp_create_manifests | bool
 
 - name: Configure hybrid networkworking if required
   ansible.builtin.template:
     src: cluster-network-03-config.yml.j2
-    dest: "{{ aws_cluster_base_directory }}/{{ aws_cluster_name }}-{{ aws_ocp_cluster_version }}/manifests/cluster-network-03-config.yml"
+    dest: "{{ __aws_ocp_cluster_directory}}/manifests/cluster-network-03-config.yml"
+    mode: 0644
   when: aws_ocp_hybrid_networking | bool
 
-# - name: Creating cluster {{ aws_cluster_name }}
-#   command: ./openshift-install create cluster --dir=.
-#   args:
-#     chdir: "{{ aws_cluster_base_directory }}/{{ aws_cluster_name }}-{{aws_ocp_cluster_version }}"
+- name: Install the cluster {{ aws_cluster_name }}
+  ansible.builtin.command: ./openshift-install create cluster --dir=.
+  args:
+    chdir: "{{ __aws_ocp_cluster_directory }}"
+  changed_when: true
+  when: aws_ocp_run_installer | bool
