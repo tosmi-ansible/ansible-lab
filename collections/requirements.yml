@@ -20,7 +20,7 @@ collections:
     source: https://console.redhat.com/api/automation-hub/
 
   - name: ansible.posix
-    version: 1.5.4
+    version: 1.6.2
     source: https://galaxy.ansible.com
 
   - name: community.libvirt
