@@ -36,7 +36,7 @@ collections:
     source: https://galaxy.ansible.com
 
   - name: ansible.controller
-    version: 4.5.8
+    version: 4.6.3
     source: https://console.redhat.com/api/automation-hub/
 
   - name:  amazon.aws
