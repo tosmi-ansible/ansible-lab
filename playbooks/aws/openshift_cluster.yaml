@@ -1,6 +1,6 @@
 ---
 - name: Create a default OpenShift Cluster in AWS
-  hosts: '{{target|default("fractal.lan.stderr.at")}}'
-  gather_facts: no
+  hosts: '{{ target | default("localhost") }}'
+  gather_facts: false
   roles:
     - ocp-aws
