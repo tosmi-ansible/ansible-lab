@@ -48,7 +48,7 @@ collections:
     source: https://galaxy.ansible.com
 
   - name: infra.ah_configuration
-    version: 2.0.6
+    version: 2.1.0
     source: https://galaxy.ansible.com
 
   - name: infra.controller_configuration
