@@ -44,5 +44,5 @@ collections:
     source: https://console.redhat.com/api/automation-hub/
 
   - name:  redhat.satellite
-    version: 4.1.0
+    version: 4.2.0
     source: https://console.redhat.com/api/automation-hub/
