@@ -1,7 +1,8 @@
+
 {
   description = "Ansible Lab Environment";
   inputs = {
-    nixpkgs.url = "nixpkgs/nixos-24.05";
+    nixpkgs.url = "nixpkgs/nixos-unstable";
     flake-utils.url = "github:numtide/flake-utils";
   };
 
@@ -25,8 +26,8 @@
             pkgs.glibcLocales
             pkgs.yamllint
             pkgs.kubevirt
-            pkgs.python311Packages.kubernetes
-            pkgs.python311Packages.libvirt
+            pkgs.python312Packages.kubernetes
+            pkgs.python312Packages.libvirt
           ];
         };
       });
