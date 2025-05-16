@@ -1,6 +1,6 @@
 collections:
   - name: kubernetes.core
-    version: 5.0.0
+    version: 5.3.0
     source: https://console.redhat.com/api/automation-hub/
 
   - name: redhat.openshift_virtualization
