@@ -32,7 +32,7 @@ collections:
     source: https://galaxy.ansible.com
 
   - name: community.docker
-    version: 3.11.0
+    version: 3.13.7
     source: https://galaxy.ansible.com
 
   - name: community.general
