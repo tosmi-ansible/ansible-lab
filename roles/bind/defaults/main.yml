@@ -1,0 +1,49 @@
+---
+# defaults file for bind
+
+# BIND package name (may vary by distribution)
+bind_package: bind
+
+# BIND service name
+bind_service: named
+
+# BIND configuration file path
+bind_config_path: /etc/named.conf
+
+# BIND zone files directory
+bind_zones_directory: /var/named
+
+# BIND listen on interfaces (empty list means all interfaces)
+bind_listen_on: []
+
+# BIND listen on port
+bind_listen_port: 53
+
+# BIND allow query (empty list means allow all)
+bind_allow_query: []
+
+# BIND recursion (yes/no)
+bind_recursion: yes
+
+# BIND forwarders (empty list means no forwarders)
+bind_forwarders: []
+
+# BIND zones (list of zone definitions)
+# Example:
+# bind_zones:
+#   - name: example.com
+#     type: master
+#     file: example.com.zone
+#     allow_update: []
+bind_zones: []
+
+# BIND additional configuration includes
+bind_includes: []
+
+# BIND user and group
+bind_user: named
+bind_group: named
+
+
+
+

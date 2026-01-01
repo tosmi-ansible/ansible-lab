@@ -1,0 +1,58 @@
+---
+# tasks file for bind
+
+- name: Install BIND package
+  ansible.builtin.package:
+    name: "{{ bind_package }}"
+    state: present
+
+- name: Ensure BIND zones directory exists
+  ansible.builtin.file:
+    path: "{{ bind_zones_directory }}"
+    state: directory
+    owner: "{{ bind_user }}"
+    group: "{{ bind_group }}"
+    mode: '0755'
+
+- name: Deploy BIND configuration
+  ansible.builtin.template:
+    src: named.conf.j2
+    dest: "{{ bind_config_path }}"
+    owner: root
+    group: "{{ bind_group }}"
+    mode: '0640'
+    backup: yes
+  notify: restart bind
+
+- name: Deploy zone files if defined
+  ansible.builtin.template:
+    src: "{{ item.file }}.j2"
+    dest: "{{ bind_zones_directory }}/{{ item.file }}"
+    owner: "{{ bind_user }}"
+    group: "{{ bind_group }}"
+    mode: '0640'
+    backup: yes
+  loop: "{{ bind_zones }}"
+  when: bind_zones | length > 0
+  notify: restart bind
+  loop_control:
+    label: "{{ item.name }}"
+
+- name: Include additional configuration files if defined
+  ansible.builtin.copy:
+    src: "{{ item }}"
+    dest: "/etc/named/{{ item | basename }}"
+    owner: root
+    group: "{{ bind_group }}"
+    mode: '0640'
+    backup: yes
+  loop: "{{ bind_includes }}"
+  when: bind_includes | length > 0
+  notify: restart bind
+
+- name: Enable and start BIND service
+  ansible.builtin.service:
+    name: "{{ bind_service }}"
+    state: started
+    enabled: yes
+

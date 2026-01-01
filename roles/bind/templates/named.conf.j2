@@ -1,0 +1,109 @@
+//
+// named.conf
+//
+// Provided by Red Hat bind package to configure the ISC BIND named(8) DNS
+// server as a caching only nameserver (as a localhost DNS resolver only).
+//
+// See /usr/share/doc/bind*/sample/ for example named configuration files.
+//
+
+options {
+	listen-on port {{ bind_listen_port }} {
+{% if bind_listen_on | length > 0 %}
+{% for interface in bind_listen_on %}
+		{{ interface }};
+{% endfor %}
+{% else %}
+		any;
+{% endif %}
+	};
+	listen-on-v6 port {{ bind_listen_port }} { any; };
+	directory 	"/var/named";
+	dump-file 	"/var/named/data/cache_dump.db";
+	statistics-file "/var/named/data/named_stats.txt";
+	memstatistics-file "/var/named/data/named_mem_stats.txt";
+	secroots-file	"/var/named/data/named.secroots";
+	recursing-file	"/var/named/data/named.recursing";
+{% if bind_allow_query | length > 0 %}
+	allow-query {
+{% for network in bind_allow_query %}
+		{{ network }};
+{% endfor %}
+	};
+{% else %}
+	allow-query     { any; };
+{% endif %}
+	allow-recursion { any; };
+
+	recursion {{ bind_recursion | ternary('yes', 'no') }};
+{% if bind_forwarders | length > 0 %}
+	forwarders {
+{% for forwarder in bind_forwarders %}
+		{{ forwarder }};
+{% endfor %}
+	};
+	forward only;
+{% endif %}
+
+	dnssec-enable yes;
+	dnssec-validation yes;
+
+	/* Path to ISC DLV key */
+	bindkeys-file "/etc/named.root.key";
+
+	managed-keys-directory "/var/named/dynamic";
+
+	pid-file "/run/named/named.pid";
+	session-keyfile "/run/named/session.key";
+
+	/* https://fedoraproject.org/wiki/Changes/CryptoPolicy */
+	include "/etc/crypto-policies/back-ends/bind.config";
+};
+
+logging {
+        channel default_debug {
+                file "data/named.run";
+                severity dynamic;
+        };
+};
+
+zone "." IN {
+	type hint;
+	file "named.ca";
+};
+
+{% if bind_zones | length > 0 %}
+{% for zone in bind_zones %}
+zone "{{ zone.name }}" IN {
+	type {{ zone.type }};
+	file "{{ zone.file }}";
+{% if zone.allow_update is defined and zone.allow_update | length > 0 %}
+	allow-update {
+{% for update in zone.allow_update %}
+		{{ update }};
+{% endfor %}
+	};
+{% endif %}
+{% if zone.masters is defined and zone.masters | length > 0 %}
+	masters {
+{% for master in zone.masters %}
+		{{ master }};
+{% endfor %}
+	};
+{% endif %}
+};
+{% endfor %}
+{% endif %}
+
+include "/etc/named.rfc1912.zones";
+include "/etc/named.root.key";
+
+{% if bind_includes | length > 0 %}
+{% for include_file in bind_includes %}
+include "/etc/named/{{ include_file | basename }}";
+{% endfor %}
+{% endif %}
+
+
+
+

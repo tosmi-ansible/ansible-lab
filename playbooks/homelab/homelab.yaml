@@ -1,0 +1,8 @@
+- name: Configure DNS and DHCP server
+  gather_facts: no
+  become: yes
+  hosts:
+    - localhost
+  roles:
+    - dns
+    - dhcp
