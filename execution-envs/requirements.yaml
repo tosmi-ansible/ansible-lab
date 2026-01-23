@@ -52,7 +52,7 @@ collections:
     source: https://galaxy.ansible.com
 
   - name: infra.controller_configuration
-    version: 2.9.0
+    version: 2.11.0
     source: https://galaxy.ansible.com
 
   - name: infra.eda_configuration
