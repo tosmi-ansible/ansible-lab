@@ -1,0 +1,52 @@
+{
+    "containerUser": "root",
+    "customizations": {
+      "vscode": {
+        "extensions": [
+            "redhat.ansible",
+            "saoudrizwan.claude-dev",
+            "lucax88x.codeacejumper",
+            "jborean.ansibug"
+        ]
+      }
+    },
+    "image": "quay.io/tosmi/ansible-dev-container:v1.6-community",
+    "name": "ansible-dev-container-podman",
+    "mounts": [
+        "source=${localEnv:HOME}/.ssh,target=/root/.ssh,type=bind",
+	"source=${localEnv:HOME}/.kube,target=/root/.kube,type=bind",
+	"source=${localEnv:HOME}/.private/.gnupg,target=/root/.gnupg,type=bind",
+        "source=${localEnv:HOME}/.ansible.cfg,target=/root/.ansible.cfg,type=bind",
+        "source=${localEnv:HOME}/.authinfo.gpg,target=/root/.authinfo.gpg,type=bind",
+        "source=${localEnv:HOME}/bin/vault-lab.sh,target=/root/bin/vault-lab.sh,type=bind",
+        "source=${localEnv:HOME}/git/lab/inventory,target=/workspaces/inventory,type=bind",
+        "source=ansible-shellhistory,target=/commandhistory,type=volume",
+	"source=/tmp/ssh-agent.sock,target=/tmp/ssh-auth.sock,type=bind"
+    ],
+    "containerEnv": {
+	"ANSIBLE_GALAXY_SERVER_HUB_VALIDATED_TOKEN": "${localEnv:ANSIBLE_GALAXY_SERVER_HUB_VALIDATED_TOKEN}",
+	"ANSIBLE_GALAXY_SERVER_HUB_CERTIFIED_TOKEN": "${localEnv:ANSIBLE_GALAXY_SERVER_HUB_CERTIFIED_TOKEN}",
+	"ANSIBLE_GALAXY_SERVER_HUB_COMMUNITY_TOKEN": "${localEnv:ANSIBLE_GALAXY_SERVER_HUB_COMMUNITY_TOKEN}",
+	"ANSIBLE_GALAXY_SERVER_HUB_COMMUNITY_TOKEN": "${localEnv:ANSIBLE_GALAXY_SERVER_HUB_COMMUNITY_TOKEN}"
+	"SSH_AUTH_SOCK": "/tmp/ssh-auth.sock"
+    },
+    "runArgs": [
+	"--annotation=instance=ansible-lab",
+	"--cap-add=CAP_MKNOD",
+	"--cap-add=NET_ADMIN",
+	"--cap-add=SYS_ADMIN",
+	"--cap-add=SYS_RESOURCE",
+	"--device",
+	"/dev/fuse",
+	"--security-opt",
+	"seccomp=unconfined",
+	"--security-opt",
+	"label=disable",
+	"--security-opt",
+	"apparmor=unconfined",
+	"--security-opt",
+	"unmask=/sys/fs/cgroup",
+	"--userns=host",
+	"--hostname=ansible-dev-container"
+    ]
+  }

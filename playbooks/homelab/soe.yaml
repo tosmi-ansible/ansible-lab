@@ -1,0 +1,14 @@
+- name: Deploy a standard host
+  hosts: all
+  gather_facts: true
+  tasks:
+
+    - name: Update all packages
+      community.general.zypper:
+        name: '*'
+        state: latest
+
+    - name: Install required packages
+      community.general.zypper:
+        name: "{{ packages }}"
+        state: present
